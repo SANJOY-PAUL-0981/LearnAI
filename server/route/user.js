@@ -1,6 +1,8 @@
-const { userModel } = require('../model/db')
+const { userModel, messageModel } = require('../model/db')
 const bcrypt = require("bcrypt")
 const { z, string } = require("zod")
+const jwt = require("jsonwebtoken")
+const { JWT_SECRET_USER } = require("../config")
 
 const { Router } = require("express")
 userRouter = Router()
@@ -28,8 +30,10 @@ userRouter.post("/signup", async (req, res) => {
             .max(20)
     })
 
+    // parsing the payload from req.body
     const parsedData = requireBody.safeParse(req.body)
 
+    // verifying the success of parsedData
     if (!parsedData.success) {
         return res.status(400).json({
             message: "Incorrect Format",
@@ -38,11 +42,14 @@ userRouter.post("/signup", async (req, res) => {
         })
     }
 
+    // taking payload
     const { email, username, education, password } = req.body
 
     try {
+        // hashing the password
         const hashedPassword = await bcrypt.hash(password, 10)
 
+        // creating the user
         const user = await userModel.create({
             email: email,
             username: username,
@@ -50,8 +57,21 @@ userRouter.post("/signup", async (req, res) => {
             password: hashedPassword
         })
 
-        res.json({
+        // jwt session creation at the time of signup
+        const token = jwt.sign(
+            {
+                userId: user._id
+            },
+            JWT_SECRET_USER,
+            {
+                expiresIn: "14d"
+            }
+        )
+
+        // response
+        return res.json({
             message: "User Signed Up",
+            token,
             user // will remove this in prod
         })
 
@@ -64,6 +84,49 @@ userRouter.post("/signup", async (req, res) => {
 })
 
 //signin route
+userRouter.post("/login", async (req, res) => {
+    // email & password payload
+    const { email, password } = req.body
+
+    // searching user in payload email in db
+    const user = await userModel.findOne({
+        email: email
+    })
+
+    // sending error code if there is no user with that email
+    if (!user) {
+        return res.status(404).json({
+            message: "There are no user with this email",
+            code: 404
+        })
+    }
+
+    // compere the hashed password
+    const userPasswordMatched = await bcrypt.compare(password, user.password)
+
+    // conditions for password mathced and unmatched
+    if (userPasswordMatched) {
+        const token = jwt.sign(
+            {
+                userId: user._id
+            },
+            JWT_SECRET_USER,
+            {
+                expiresIn: "14d"
+            }
+        )
+
+        return res.json({
+            message: "User logged in",
+            token
+        })
+    } else {
+        return res.status(401).json({
+            message: "Incorrect Credentials",
+            code: 401
+        })
+    }
+})
 
 module.exports = ({
     userRouter: userRouter
