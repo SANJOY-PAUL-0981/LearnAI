@@ -61,3 +61,13 @@ const chatSchema = new Schema({
         expires: 10 // 10 sec for testing, for real it will be 3600
     }
 })
+
+const userModel = mongoose.model("user", userSchema)
+const messageModel = mongoose.model("message", messageSchema)
+const chatModel = mongoose.model("chat", chatSchema)
+
+module.exports = ({
+    userModel,
+    messageModel,
+    chatModel
+})
