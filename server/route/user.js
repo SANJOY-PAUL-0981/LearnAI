@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt")
 const { z, string } = require("zod")
 const jwt = require("jsonwebtoken")
 const { JWT_SECRET_USER } = require("../config")
+const { userMiddleware } = require("../middleware/userMiddleware")
 
 const { Router } = require("express")
 userRouter = Router()
@@ -139,6 +140,19 @@ userRouter.post("/login", async (req, res) => {
             code: 401
         })
     }
+})
+
+// GET user data
+userRouter.get("/userInfo", userMiddleware, async(req, res) => {
+    const userId = req.userId;
+    
+    const user = await userModel.findOne({
+        _id: userId
+    })
+
+    return res.json({
+        user
+    })
 })
 
 module.exports = ({
