@@ -73,7 +73,6 @@ userRouter.post("/signup", async (req, res) => {
         return res.json({
             message: "Signup successful. Logged in.",
             token,
-            user // will remove this in prod
         })
 
     } catch (err) {
@@ -143,16 +142,23 @@ userRouter.post("/login", async (req, res) => {
 })
 
 // GET user data
-userRouter.get("/userInfo", userMiddleware, async(req, res) => {
+userRouter.get("/userInfo", userMiddleware, async (req, res) => {
     const userId = req.userId;
-    
-    const user = await userModel.findOne({
-        _id: userId
-    })
 
-    return res.json({
-        user
-    })
+    try {
+        const user = await userModel.findOne({
+            _id: userId
+        })
+
+        return res.json({
+            user
+        })
+    } catch (err) {
+        return res.status(500).json({
+            message: "Something went wrong",
+            code: 500
+        })
+    }
 })
 
 module.exports = ({
