@@ -70,7 +70,7 @@ userRouter.post("/signup", async (req, res) => {
 
         // response
         return res.json({
-            message: "User Signed Up",
+            message: "Signup successful. Logged in.",
             token,
             user // will remove this in prod
         })
@@ -85,18 +85,31 @@ userRouter.post("/signup", async (req, res) => {
 
 //signin route
 userRouter.post("/login", async (req, res) => {
-    // email & password payload
-    const { email, password } = req.body
 
-    // searching user in payload email in db
-    const user = await userModel.findOne({
-        email: email
-    })
+    // email & password payload
+    const { email, username, password } = req.body;
+    let user;
+
+    // verifying username or gmail by using regex
+    const regex = /^\S+@\S+\.\S+$/;
+    const isValidEmail = regex.test(email)
+
+    if (isValidEmail) {
+        // searching user in payload email in db
+        user = await userModel.findOne({
+            email: email
+        })
+    } else {
+        // searching user in payload username in db
+        user = await userModel.findOne({
+            username: username
+        })
+    }
 
     // sending error code if there is no user with that email
     if (!user) {
         return res.status(404).json({
-            message: "There are no user with this email",
+            message: "There are no user with this email or username",
             code: 404
         })
     }
