@@ -9,6 +9,7 @@ transcriptRouter = Router()
 transcriptRouter.post("/transcriptGeneration", userMiddleware, async (req, res) => {
 
     const { videoUrl } = req.body
+    const userId = req.userId
 
     if (!videoUrl) {
         return res.status(400).json({
@@ -35,6 +36,7 @@ transcriptRouter.post("/transcriptGeneration", userMiddleware, async (req, res) 
         const transcript = response.data.transcript
 
         const chat = await chatModel.create({
+            userId: userId,
             transcription: transcript
         })
 
