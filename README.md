@@ -9,3 +9,5 @@ YouTube Transcript APIs from RapidAPI:
 - https://rapidapi.com/Reza-Rg/api/youtube-transcribe-fastest-youtube-transcriber/playground/apiendpoint_f9008f6e-74cc-44eb-a262-64f838b70f84 = 100 req/m
 - https://rapidapi.com/rahilkhan224/api/youtube-video-summarizer-gpt-ai/playground/apiendpoint_92423465-6a0a-4355-a595-90014cd90a25 = 350 req/m (if this works then maybe i will use this in prod)
 - https://rapidapi.com/nikzeferis/api/youtube-captions-transcript-subtitles-video-combiner/playground/apiendpoint_dccbec3e-efe7-4016-ba37-3f5e45b49999 = 100 req/m
+
+#### Will use ollama locally for the model (no gemini this time)

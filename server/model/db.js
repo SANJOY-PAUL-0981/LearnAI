@@ -55,11 +55,12 @@ const chatSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    lastActiveAt: {
+    // Activate it when will be needed
+    /*lastActiveAt: {
         type: Date,
         default: Date.now,
         expires: 10 // 10 sec for testing, for real it will be 3600
-    }
+    }*/
 })
 
 const userModel = mongoose.model("user", userSchema)
