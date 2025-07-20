@@ -41,7 +41,7 @@ chatRouter.post("/send", userMiddleware, async (req, res) => {
         })
 
         const chat = await chatModel.updateOne(
-            { _id:chatId, userId: userId },
+            { _id: chatId, userId: userId },
             {
                 $set: { updatedAt: new Date() },
 
@@ -69,10 +69,38 @@ chatRouter.get("/allChats", userMiddleware, async (req, res) => {
     const userChats = await chatModel.find({
         userId: userId
     }).sort({ updatedAt: -1 })
-    
+
     return res.json({
         userChats
     })
+})
+
+chatRouter.get("/convo/:chatId", userMiddleware, async (req, res) => {
+    try {
+        const chatId = req.params.chatId
+        const userId = req.userId
+
+        const chat = await chatModel.findOne({
+            userId: userId,
+            _id: chatId
+        })
+
+        if (!chat) {
+            return res.status(404).json({
+                message: "No chat found",
+                code: 404
+            })
+        }
+
+        return res.json({
+            chat
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: "Something went wrong",
+            code: 500
+        })
+    }
 })
 
 module.exports = ({
