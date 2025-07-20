@@ -35,12 +35,22 @@ transcriptRouter.post("/create", userMiddleware, async (req, res) => {
         const response = await axios.request(options)
         const transcript = response.data.transcript
 
+        if (!transcript || transcript.trim() === "") {
+            return res.status(404).json({
+                message: "Transcription not found",
+                code: 404
+            })
+        }
+
         const chat = await chatModel.create({
             userId: userId,
             transcription: transcript
         })
 
+        const chatId = chat._id
+
         return res.json({
+            chatId,
             chat
         })
     } catch (err) {

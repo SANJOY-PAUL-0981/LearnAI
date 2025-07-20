@@ -22,7 +22,7 @@ chatRouter.post("/send", userMiddleware, async (req, res) => {
         })
     }
 
-    const { role, content } = req.body
+    const { role, content, chatId } = req.body
     const userId = req.userId
 
     try {
@@ -35,12 +35,13 @@ chatRouter.post("/send", userMiddleware, async (req, res) => {
 
         const messages = await messageModel.create({
             userId: userId,
+            chatId: chatId,
             role: role,
             content: content
         })
 
         const chat = await chatModel.updateOne(
-            { userId: userId },
+            { _id:chatId, userId: userId },
             {
                 $set: { updatedAt: new Date() },
 
@@ -52,8 +53,7 @@ chatRouter.post("/send", userMiddleware, async (req, res) => {
 
         return res.json({
             message: "Message Sent",
-            messages, // will be removed in prod
-            chat // will be removed in prod
+            chat //will remove in prod
         })
     } catch {
         return res.status(500).json({
@@ -68,7 +68,7 @@ chatRouter.get("/allChats", userMiddleware, async (req, res) => {
 
     const userChats = await chatModel.find({
         userId: userId
-    })
+    }).sort({ updatedAt: -1 })
     
     return res.json({
         userChats

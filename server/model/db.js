@@ -27,6 +27,9 @@ const messageSchema = new Schema({
         ref: 'user',
         index: true,
     },
+    chatId: {
+        type: ObjectId
+    },
     role: {
         type: String,
         enum: ['user', 'ai'],
