@@ -2,11 +2,14 @@ const { Router } = require("express")
 const { userMiddleware } = require("../middleware/userMiddleware")
 const { chatModel, messageModel } = require("../model/db")
 const { z } = require("zod")
+const leoProfanity = require("leo-profanity");
 
 chatRouter = Router()
 
+// Send Message Route
 chatRouter.post("/send", userMiddleware, async (req, res) => {
 
+    // zod validation
     const requireBody = z.object({
         role: z.enum(['user', 'ai']),
         content: z.string().min(1, "Enter Something")
@@ -22,10 +25,12 @@ chatRouter.post("/send", userMiddleware, async (req, res) => {
         })
     }
 
+    // taking input
     const { role, content, chatId } = req.body
     const userId = req.userId
 
     try {
+        // checking content availablity
         if (!content) {
             return res.status(400).json({
                 message: "Enter Something",
@@ -33,6 +38,16 @@ chatRouter.post("/send", userMiddleware, async (req, res) => {
             })
         }
 
+        // bad words check
+        const hasBadWords = leoProfanity.check(content)
+        if (hasBadWords) {
+            return res.status(403).json({
+                message: "Inappropriate language detected",
+                code: 403
+            })
+        }
+
+        // message doc create
         const messages = await messageModel.create({
             userId: userId,
             chatId: chatId,
@@ -40,6 +55,7 @@ chatRouter.post("/send", userMiddleware, async (req, res) => {
             content: content
         })
 
+        // message push in chatModel
         const chat = await chatModel.updateOne(
             { _id: chatId, userId: userId },
             {
@@ -63,18 +79,21 @@ chatRouter.post("/send", userMiddleware, async (req, res) => {
     }
 })
 
+// Fetch all chats route
 chatRouter.get("/allChats", userMiddleware, async (req, res) => {
     const userId = req.userId
 
+    // fetching all chats of a user
     const userChats = await chatModel.find({
         userId: userId
-    }).sort({ updatedAt: -1 })
+    }).sort({ updatedAt: -1 }) // recently updated chats will come first
 
     return res.json({
         userChats
     })
 })
 
+// fetch everuthing of a perticular of a user chat
 chatRouter.get("/convo/:chatId", userMiddleware, async (req, res) => {
     try {
         const chatId = req.params.chatId

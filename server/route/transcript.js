@@ -6,11 +6,14 @@ const { RAPID_API_KEY } = require("../config")
 
 transcriptRouter = Router()
 
+// Fetch transcript and save route
 transcriptRouter.post("/create", userMiddleware, async (req, res) => {
 
+    // taking input
     const { videoUrl } = req.body
     const userId = req.userId
 
+    // checking video availablity
     if (!videoUrl) {
         return res.status(400).json({
             error: "Enter Video URL",
@@ -19,6 +22,7 @@ transcriptRouter.post("/create", userMiddleware, async (req, res) => {
     }
 
     try {
+        // API call for transcription
         const options = {
             method: 'GET',
             url: 'https://fetch-youtube-transcript1.p.rapidapi.com/transcript-with-url',
@@ -35,6 +39,7 @@ transcriptRouter.post("/create", userMiddleware, async (req, res) => {
         const response = await axios.request(options)
         const transcript = response.data.transcript
 
+        // transcription availabilty check
         if (!transcript || transcript.trim() === "") {
             return res.status(404).json({
                 message: "Transcription not found",
