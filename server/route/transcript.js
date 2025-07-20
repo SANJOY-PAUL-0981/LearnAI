@@ -6,7 +6,7 @@ const { RAPID_API_KEY } = require("../config")
 
 transcriptRouter = Router()
 
-transcriptRouter.post("/transcriptGeneration", userMiddleware, async (req, res) => {
+transcriptRouter.post("/create", userMiddleware, async (req, res) => {
 
     const { videoUrl } = req.body
     const userId = req.userId

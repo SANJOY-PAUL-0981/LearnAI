@@ -22,6 +22,11 @@ const userSchema = new Schema({
 })
 
 const messageSchema = new Schema({
+    userId: {
+        type: ObjectId,
+        ref: 'user',
+        index: true,
+    },
     role: {
         type: String,
         enum: ['user', 'ai'],
@@ -30,10 +35,6 @@ const messageSchema = new Schema({
     content: {
         type: String,
         required: true
-    },
-    timeStamp: {
-        type: Date,
-        default: Date.now
     }
 })
 
