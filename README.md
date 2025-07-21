@@ -21,7 +21,8 @@ YouTube Transcript APIs from RapidAPI:
 4. Send prompt to Mistral via Ollama
 5. Receive Mistral’s reply
 6. Save both user & assistant messages to DB
-7. Return the assistant reply to the frontend
+7. Return the assistant reply to the frontend.
+
 This will basically manage the user sent message, fetch contexts menas the previous messages and transcript and feed it as prompt to llm and generate the response, then the response will be saved in db
 
 - Make a route called `/pdf` for generating the summary of a transcript
