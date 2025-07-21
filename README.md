@@ -28,7 +28,7 @@ YouTube Transcript APIs from RapidAPI:
 This will basically manage the user sent message, fetch contexts menas the previous messages and transcript and feed it as prompt to llm and generate the response, then the response will be saved in db
 
 - Make a route called `/pdf` for generating the summary of a transcript
-- Make `/chat/delete` route
+- Make `/chat/delete` route = *DONE*
 
 ## Frontend
 - Must Use polling in chatting to fetch `/chat/history/:chatId`

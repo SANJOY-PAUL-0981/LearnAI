@@ -122,6 +122,33 @@ chatRouter.get("/history/:chatId", userMiddleware, async (req, res) => {
     }
 })
 
+// delete chat
+chatRouter.delete("/delete/:chatId", userMiddleware, async (req, res) => {
+    try {
+        const userId = req.userId
+        const chatId = req.params.chatId
+
+        await chatModel.findOneAndDelete({
+            _id: chatId,
+            userId: userId
+        })
+
+        await messageModel.deleteMany({
+            chatId: chatId,
+            userId: userId
+        })
+
+        return res.json({
+            message: "Chat successfully deleted"
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: "Something Went Wrong",
+            code: 500
+        })
+    }
+})
+
 module.exports = ({
     chatRouter: chatRouter
 })
