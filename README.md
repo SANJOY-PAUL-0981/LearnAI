@@ -1,4 +1,6 @@
 # LearnAI
+This is learn AI, chat with Youtube videos and learn more efficiently
+## Backend
 On every sentMessage API call i should update the time in updatedAt and lastActiveAt
 
 YouTube Transcript APIs from RapidAPI:
@@ -27,3 +29,6 @@ This will basically manage the user sent message, fetch contexts menas the previ
 
 - Make a route called `/pdf` for generating the summary of a transcript
 - Make `/chat/delete` route
+
+## Frontend
+- Must Use polling in chatting to fetch `/chat/history/:chatId`
