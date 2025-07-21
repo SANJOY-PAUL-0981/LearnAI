@@ -80,7 +80,7 @@ chatRouter.post("/send", userMiddleware, async (req, res) => {
 })
 
 // Fetch all chats route
-chatRouter.get("/allChats", userMiddleware, async (req, res) => {
+chatRouter.get("/all", userMiddleware, async (req, res) => {
     const userId = req.userId
 
     // fetching all chats of a user
@@ -94,7 +94,7 @@ chatRouter.get("/allChats", userMiddleware, async (req, res) => {
 })
 
 // fetch everuthing of a perticular of a user chat
-chatRouter.get("/convo/:chatId", userMiddleware, async (req, res) => {
+chatRouter.get("/history/:chatId", userMiddleware, async (req, res) => {
     try {
         const chatId = req.params.chatId
         const userId = req.userId

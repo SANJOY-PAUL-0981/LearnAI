@@ -11,3 +11,18 @@ YouTube Transcript APIs from RapidAPI:
 - https://rapidapi.com/nikzeferis/api/youtube-captions-transcript-subtitles-video-combiner/playground/apiendpoint_dccbec3e-efe7-4016-ba37-3f5e45b49999 = 100 req/m
 
 #### Will use ollama locally for the model (no gemini this time)
+
+- ### New `/send` route
+- This single route will:
+
+1. Receive the latest user message from frontend
+2. Fetch previous messages using chatId from DB
+3. Construct the full prompt (context)
+4. Send prompt to Mistral via Ollama
+5. Receive Mistral’s reply
+6. Save both user & assistant messages to DB
+7. Return the assistant reply to the frontend
+This will basically manage the user sent message, fetch contexts menas the previous messages and transcript and feed it as prompt to llm and generate the response, then the response will be saved in db
+
+- Make a route called `/pdf` for generating the summary of a transcript
+- Make `/chat/delete` route
