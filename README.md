@@ -1,7 +1,6 @@
 # LearnAI
 This is learn AI, chat with Youtube videos and learn more efficiently
 ## Backend
-On every sentMessage API call i should update the time in updatedAt and lastActiveAt
 
 YouTube Transcript APIs from RapidAPI:
 (Not sure about all of them working, i can change gmail and create a API always)
@@ -12,23 +11,7 @@ YouTube Transcript APIs from RapidAPI:
 - https://rapidapi.com/rahilkhan224/api/youtube-video-summarizer-gpt-ai/playground/apiendpoint_92423465-6a0a-4355-a595-90014cd90a25 = 350 req/m (if this works then maybe i will use this in prod)
 - https://rapidapi.com/nikzeferis/api/youtube-captions-transcript-subtitles-video-combiner/playground/apiendpoint_dccbec3e-efe7-4016-ba37-3f5e45b49999 = 100 req/m
 
-#### Will use ollama locally for the model (no gemini this time)
-
-- ### New `/send` route
-- This single route will:
-
-1. Receive the latest user message from frontend
-2. Fetch previous messages using chatId from DB
-3. Construct the full prompt (context)
-4. Send prompt to Mistral via Ollama
-5. Receive Mistral’s reply
-6. Save both user & assistant messages to DB
-7. Return the assistant reply to the frontend.
-
-This will basically manage the user sent message, fetch contexts menas the previous messages and transcript and feed it as prompt to llm and generate the response, then the response will be saved in db
-
-- Make a route called `/pdf` for generating the summary of a transcript
-- Make `/chat/delete` route = *DONE*
+- PDF format or gemini response generation prettify
 
 ## Frontend
 - Must Use polling in chatting to fetch `/chat/history/:chatId`
