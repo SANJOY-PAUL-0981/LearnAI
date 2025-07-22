@@ -3,11 +3,11 @@ const { userMiddleware } = require("../middleware/userMiddleware")
 const axios = require("axios")
 const { chatModel } = require("../model/db")
 const { GoogleGenAI } = require("@google/genai")
+const { PDFDocument } = require("pdfkit")
 const { GEMINI_API } = require("../config")
 const { RAPID_API_KEY } = require("../config")
 
 transcriptRouter = Router()
-
 const ai = new GoogleGenAI({
     apiKey: GEMINI_API
 });
@@ -92,19 +92,34 @@ transcriptRouter.get("/summarize/:chatId", userMiddleware, async (req, res) => {
                 ---
                 YOU HAVE TO ONLY SUMMARIZE THE GIVEN TRANSCRIPT IN A SMALL PARAGRAPTH WHICH WILL BE SIMPLE TO UNDERSTAND AND READ AND PLEASE PLEASE EXPLAIN EVERY TOPIC EVERY WORDS RELETED TO THE SUBJECT AT LEAST GIVE DEFINATION OF THOSE TOPICS AND EXAMPLE, MINIMUM 70% OF TOTAL CHARACTERS OF TRANSCRIPT MUST BE IN THE SUMMARY, JUST ACT LIKE A TEACHER`
 
-    try{
+    try {
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
             contents: prompt
         })
 
-        console.log(response.text)
+        // 1. Generate PDF
+        const PDFDocument = require('pdfkit');
+        const doc = new PDFDocument();
 
-        res.json({
-            message: "Successfully generated response",
-            response: response.text
-        })
-    }catch(error){
+        // 2. Set headers to trigger download
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'attachment; filename=summary.pdf');
+
+        // 3. Pipe the PDF to response
+        doc.pipe(res);
+
+        // 4. Add summary content to PDF
+        doc.fontSize(20).text('Transcript Summary', { align: 'center' });
+        doc.moveDown();
+        doc.fontSize(12).text(response.text, {
+            align: 'left',
+            lineGap: 4
+        });
+
+        doc.end();
+
+    } catch (error) {
         console.error(error.message)
         res.status(500).json({
             message: "Something Went Wrong, Gemini Failed to produce summary",
