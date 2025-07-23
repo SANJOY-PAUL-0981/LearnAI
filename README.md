@@ -1,7 +1,7 @@
 # LearnAI
 This is learn AI, chat with Youtube videos and learn more efficiently
 ## Backend
-
+### API Resources
 YouTube Transcript APIs from RapidAPI:
 (Not sure about all of them working, i can change gmail and create a API always)
 - https://rapidapi.com/ninja-api-ninja-api-default/api/fetch-youtube-transcript1/pricing = 120 req/m (*current*)
