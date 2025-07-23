@@ -1,6 +1,17 @@
 # LearnAI
 This is learn AI, chat with Youtube videos and learn more efficiently
 ## Backend
+### Backend Routes:
+1. `POST: /user/signup` (response = token)
+2. `POST: /user/login` (response = token)
+3. `GET: /user/userInfo` (response = user)
+4. `POST: /transcript/create` (response = chat & chatId)
+5. `GET: /transcript/summarize/:chatId` (response = summary pdf)
+6. `POST: /chat/send` (response = userQuestion & aiResponse)
+7. `GET: /chat/all` (response = userChats)
+8. `GET: /chat/history/:chatId` (response = chat)
+9. `DELETE: /chat/delete/:chatId` (response = "Chat successfully deleted"
+
 ### API Resources
 YouTube Transcript APIs from RapidAPI:
 (Not sure about all of them working, i can change gmail and create a API always)
