@@ -154,7 +154,7 @@ export default function DarkVeil({
   return (
     <canvas
       ref={ref}
-      className="w-full h-full block"
+      className="w-full h-full block inset-0 -z-10 pointer-events-none fixed"
     />
   );
 }

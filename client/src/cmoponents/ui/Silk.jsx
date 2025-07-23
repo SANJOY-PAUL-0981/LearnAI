@@ -117,9 +117,11 @@ const Silk = ({
   );
 
   return (
+  <div className="fixed inset-0 -z-10 pointer-events-none">
     <Canvas dpr={[1, 2]} frameloop="always">
       <SilkPlane ref={meshRef} uniforms={uniforms} />
     </Canvas>
+  </div>
   );
 };
 

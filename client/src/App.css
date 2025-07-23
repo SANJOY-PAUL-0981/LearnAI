@@ -1,1 +1,21 @@
 @import "tailwindcss";
+
+.font-poppins {
+  font-family: 'Poppins', sans-serif;
+}
+
+.font-inconsolata {
+  font-family: 'Inconsolata', monospace;
+}
+
+.font-xanh {
+  font-family: 'Xanh Mono', monospace;
+}
+
+.font-gilda {
+  font-family: 'Gilda Display', serif;
+}
+
+.font-play {
+  font-family: "Playfair Display", serif;
+}
