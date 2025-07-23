@@ -16,7 +16,7 @@ export const Hero = () => {
             </div>
 
             <div className="flex flex-col items-center gap-8">
-                <div className="text-2xl w-[75vw] text-center text-gray-200">
+                <div className="text-2xl w-[75vw] text-center text-gray-200 font-poppins">
                     Transform your learning experience with LearnAI. Ask questions, get instant answers, and dive deeper into any YouTube video content with our AI-powered chat interface.
                 </div>
                 <div className="flex gap-5">

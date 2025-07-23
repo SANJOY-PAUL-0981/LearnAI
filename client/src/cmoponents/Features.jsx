@@ -14,7 +14,7 @@ export const Features = () => {
                     Why Choose LearnAI?
                 </p>
 
-                <p className="text-2xl w-[50vw] text-center text-gray-200">
+                <p className="text-2xl w-[55vw] text-center text-gray-200 font-poppins">
                     Experience the future of video-based learning with our cutting-edge AI technology
                 </p>
             </div>
