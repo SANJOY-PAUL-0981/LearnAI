@@ -1,5 +1,6 @@
 import { Navbar } from "../cmoponents/Navbar"
 import { Hero } from "../cmoponents/Hero"
+import { Demo } from "../cmoponents/Demo"
 import DarkVeil from "../cmoponents/ui/DarkVeil"
 import LightRays from "../cmoponents/ui/LightRays"
 import Silk from "../cmoponents/ui/Silk"
@@ -11,6 +12,7 @@ export const HomePage = () => {
                 <DarkVeil />
                 <Navbar />
                 <Hero />
+                <Demo />
             </div>
         </>
     )
