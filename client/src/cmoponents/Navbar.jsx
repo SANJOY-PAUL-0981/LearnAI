@@ -5,7 +5,7 @@ import StarBorder from "./ui/StarBorder"
 export const Navbar = () => {
     return (
         <div className="flex justify-between px-20 py-5">
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-2 items-center cursor-pointer">
                 <div className="bg-gradient-to-br from-gray-200 to-gray-600 p-1 rounded-lg">
                     <LuBrain className="size-7" />
                 </div>

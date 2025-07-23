@@ -3,6 +3,8 @@ import { Hero } from "../cmoponents/Hero"
 import { Demo } from "../cmoponents/Demo"
 import { Features } from "../cmoponents/Features"
 import { HowWorks } from "../cmoponents/HowWorks"
+import { GetStarted } from "../cmoponents/GetStarted"
+import { Footer } from "../cmoponents/Footer"
 import DarkVeil from "../cmoponents/ui/DarkVeil"
 import LightRays from "../cmoponents/ui/LightRays"
 import Silk from "../cmoponents/ui/Silk"
@@ -17,6 +19,8 @@ export const HomePage = () => {
                 <Demo />
                 <Features />
                 <HowWorks />
+                <GetStarted />
+                <Footer />
             </div>
         </>
     )
