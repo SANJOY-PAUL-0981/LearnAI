@@ -2,7 +2,7 @@ import { LuBrain } from "react-icons/lu";
 import ShinyText from "./ui/ShinyText"
 import StarBorder from "./ui/StarBorder"
 
-export const Navbar = () => {
+export const Navbar = ({ setAuthType }) => {
     return (
         <div className="flex justify-between px-20 py-5">
             <div className="flex gap-2 items-center cursor-pointer">
@@ -17,14 +17,17 @@ export const Navbar = () => {
                     as="button"
                     className="custom-class cursor-pointer"
                     color="cyan"
-                    speed="5s">
+                    speed="5s"
+                    onClick={() => setAuthType("signup")}>
                     SignUp
                 </StarBorder>
+
                 <StarBorder
                     as="button"
                     className="custom-class cursor-pointer"
                     color="cyan"
-                    speed="5s">
+                    speed="5s"
+                    onClick={() => setAuthType("login")}>
                     LogIn
                 </StarBorder>
             </div>

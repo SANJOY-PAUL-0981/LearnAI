@@ -11,6 +11,7 @@ This is learn AI, chat with Youtube videos and learn more efficiently
 7. `GET: /chat/all` (response = userChats)
 8. `GET: /chat/history/:chatId` (response = chat)
 9. `DELETE: /chat/delete/:chatId` (response = "Chat successfully deleted"
+*OAuth intregation will think later*
 
 ### API Resources
 YouTube Transcript APIs from RapidAPI:
@@ -26,6 +27,8 @@ YouTube Transcript APIs from RapidAPI:
 
 ## Frontend
 - Must Use polling in chatting to fetch `/chat/history/:chatId`
+- skeleton add in forntend
+- *OAuth intregation will think later*
 
 LightRays -  from-[#b2e8c9] to-[#54856b]
 DarkVeil - from-[#f5f5f5] to-[#8d70d6]

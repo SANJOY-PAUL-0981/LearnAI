@@ -12,7 +12,7 @@ export const Footer = () => {
             </div>
 
             <div className="font-inconsol">
-                Made With ❤️ By <a href="https://x.com/Sanj0yX" className="text-sky-400 underline">@Sanj0yX</a>
+                Made With ❤️ By <a href="https://x.com/Sanj0yX" target="_blank" className="text-sky-400 underline">@Sanj0yX</a>
             </div>
         </div>
     )

@@ -22,3 +22,25 @@
 .font-inconsol {
     font-family: "Inconsolata", monospace;
 }
+
+/*Scroll bar styles*/
+/* For WebKit-based browsers (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* removes background */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #2f2f2f; /* dark grey */
+  border-radius: 4px;
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #2f2f2f transparent;
+}
