@@ -2,6 +2,7 @@ import { LuEye } from "react-icons/lu";
 import { LuEyeClosed } from "react-icons/lu";
 import { useState } from "react";
 import axios from "axios"
+import {ClipLoader} from "react-spinners"
 
 export const Signup = ({ setAuthType }) => {
     const [showPassword, setShowPassword] = useState(false)
@@ -100,7 +101,7 @@ export const Signup = ({ setAuthType }) => {
                     onClick={handelSignup}
                     disabled={loading}
                     className="bg-white text-black font-semibold p-2 cursor-pointer rounded-lg">
-                    {loading ? "Signing Up..." : "Sign Up"}
+                    {loading ? <ClipLoader size={18} />: "Sign Up"}
                 </button>
 
                 <div className="text-sm flex gap-2 justify-center items-center">
@@ -111,9 +112,11 @@ export const Signup = ({ setAuthType }) => {
                     </p>
                 </div>
             </div>
+            {/*error*/}
+            {error && <p className="text-red-500 border-red-500/25 border text-center p-3 rounded-lg text-sm bg-white/5 backdrop-blur-md shadow-md">⚠️   Error: {error}</p>}
 
-            {error && <p className="text-red-500">{error}</p>}
-            {message && <p className="text-green-500">{message}</p>}
+            {/*success*/}
+            {message && <p className="text-green-500 border-green-500/20 border text-center p-3 rounded-lg font-semibold  bg-white/5 backdrop-blur-md shadow-md">✨   {message}</p>}
         </div>
     )
 }
