@@ -13,12 +13,13 @@ userRouter.post("/signup", async (req, res) => {
 
     // zod for input verification before data reacing to db
     const requireBody = z.object({
-        email: z.email()
-            .min(3)
-            .max(50),
 
         username: z.string()
-            .min(1)
+            .min(1, "Enter Username")
+            .max(50),
+
+        email: z.email()
+            .min(3)
             .max(50),
 
         education: z.string()
@@ -27,7 +28,7 @@ userRouter.post("/signup", async (req, res) => {
             .optional(),
 
         password: z.string()
-            .min(8)
+            .min(8, "Password Must have 8 characters")
             .max(20)
     })
 
@@ -39,7 +40,7 @@ userRouter.post("/signup", async (req, res) => {
         return res.status(400).json({
             message: "Incorrect Format",
             code: 400,
-            error: parsedData.error
+            error: parsedData.error.issues
         })
     }
 
