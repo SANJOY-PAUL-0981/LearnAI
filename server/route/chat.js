@@ -3,10 +3,13 @@ const { userMiddleware } = require("../middleware/userMiddleware")
 const { chatModel, messageModel } = require("../model/db")
 const { z } = require("zod")
 const leoProfanity = require("leo-profanity");
-const { default: axios } = require("axios");
+const { axios } = require("axios");
 const { GoogleGenAI } = require("@google/genai")
 const { GEMINI_API } = require("../config")
+const PDFDocument = require('pdfkit');
+const { nanoid } = require('nanoid');
 
+const doc = new PDFDocument();
 const ai = new GoogleGenAI({
     apiKey: GEMINI_API
 });
@@ -195,6 +198,69 @@ chatRouter.get("/history/:chatId", userMiddleware, async (req, res) => {
     }
 })
 
+// download conversation
+chatRouter.get("/chat-download/:chatId", userMiddleware, async (req, res) => {
+    try {
+        const chatId = req.params.chatId
+        const userId = req.userId
+
+        const chat = await chatModel.findOne({
+            userId: userId,
+            _id: chatId
+        })
+
+        if (!chat) {
+            return res.status(404).json({
+                message: "No chat found",
+                code: 404
+            })
+        }
+
+        const messages = chat.messages.map(item => ({
+            role: item.role.toUpperCase(),
+            content: item.content
+        }));
+
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'attachment; filename=summary.pdf');
+
+        doc.pipe(res);
+
+        // Title
+        doc.fontSize(20).text('Conversation', { align: 'center' });
+        doc.moveDown(1.5);
+
+        // Loop through messages
+        messages.forEach(msg => {
+            doc
+                .font('Helvetica-Bold')
+                .fontSize(13)
+                .fillColor('#000')
+                .text(`${msg.role}:`, {
+                    continued: true
+                });
+
+            doc
+                .font('Helvetica')
+                .fontSize(12)
+                .fillColor('#333')
+                .text(` ${msg.content}`, {
+                    lineGap: 6
+                });
+
+            doc.moveDown(0.5);
+        });
+
+        doc.end();
+
+    } catch (error) {
+        return res.status(500).json({
+            message: "Something went wrong",
+            code: 500
+        })
+    }
+})
+
 // delete chat
 chatRouter.delete("/delete/:chatId", userMiddleware, async (req, res) => {
     try {
@@ -224,22 +290,105 @@ chatRouter.delete("/delete/:chatId", userMiddleware, async (req, res) => {
 
 // rename title
 chatRouter.put("/rename/:chatId", userMiddleware, async (req, res) => {
-    const userId = req.userId
-    const chatId = req.params.chatId
-    const videoTitle = req.body.videoTitle
+    try {
+        const userId = req.userId
+        const chatId = req.params.chatId
+        const videoTitle = req.body.videoTitle
 
-    const rename = await chatModel.findOneAndUpdate(
-        { userId: userId, _id: chatId },           
-        { $set: { videoTitle: videoTitle } },      
-        { new: true }                              
-    );
+        const rename = await chatModel.findOneAndUpdate(
+            { userId: userId, _id: chatId },
+            { $set: { videoTitle: videoTitle } },
+            { new: true }
+        );
 
-    const title = rename.videoTitle
+        const title = rename.videoTitle
 
-    res.json({
-        message: "Title renamed successfully",
-        title
-    })
+        return res.json({
+            message: "Title renamed successfully",
+            title
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: "Something went wrong",
+            code: 500,
+            error
+        })
+    }
+})
+
+// share chat
+chatRouter.post("/share/:chatId", userMiddleware, async (req, res) => {
+    try {
+        const chatId = req.params.chatId
+        const userId = req.userId
+        const publicId = nanoid(10);
+        const publicLink = `http://localhost:5173/shared/${publicId}`
+
+        const chat = await chatModel.findOneAndUpdate(
+            {
+                _id: chatId,
+                userId: userId
+            },
+            {
+                $set: { publicId: publicId, isPublic: true }
+            },
+            { new: true }
+        )
+
+        return res.json({
+            publicLink
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: "Something went wrong",
+            code: 500,
+            error
+        })
+    }
+})
+
+// public chat
+chatRouter.get("/public/:publicId", async (req, res) => {
+    try {
+        const publicId = req.params.publicId
+
+        if (!publicId) {
+            return res.status(404).json({
+                message: "Wrong Public URL",
+                code: 404
+            })
+        }
+
+        const pubChat = await chatModel.findOne({
+            publicId: publicId
+        })
+
+        if (pubChat === null) {
+            return res.status(404).json({
+                message: "Public chat not found",
+                code: 404
+            })
+        }
+
+        const chats = pubChat.messages
+
+        if (pubChat.isPublic === true) {
+            return res.json({
+                chats
+            })
+        } else {
+            return res.status(403).json({
+                message: "Chat is private",
+                code: 403
+            })
+        }
+    } catch (error) {
+        return res.status(500).json({
+            message: "Something went wrong",
+            code: 500,
+            error
+        })
+    }
 })
 
 module.exports = ({

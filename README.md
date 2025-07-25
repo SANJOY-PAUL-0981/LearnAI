@@ -12,10 +12,11 @@ This is learn AI, chat with Youtube videos and learn more efficiently
 8. `GET: /chat/history/:chatId` (response = chat)
 9. `DELETE: /chat/delete/:chatId` (response = "Chat successfully deleted")
 10. `PUT: /chat/rename/:chatId` (response = new title)
-- *OAuth intregation will think later*
-- *Let User download the chat conversation*
-- *add share chat like chatgpt*
-- *PDF format or gemini response generation prettify*
+11. `POST: /chat/share/:chatId` (response = public link)
+12. `GET: /chat/public/:publicId` (response = public chat)
+
+- *Let User download the chat conversation* = backend route created
+- *add share chat like chatgpt* = added on backend
 ### API Resources
 YouTube Transcript APIs from RapidAPI:
 (Not sure about all of them working, i can change gmail and create a API always)
@@ -25,7 +26,3 @@ YouTube Transcript APIs from RapidAPI:
 - https://rapidapi.com/Reza-Rg/api/youtube-transcribe-fastest-youtube-transcriber/playground/apiendpoint_f9008f6e-74cc-44eb-a262-64f838b70f84 = 100 req/m
 - https://rapidapi.com/rahilkhan224/api/youtube-video-summarizer-gpt-ai/playground/apiendpoint_92423465-6a0a-4355-a595-90014cd90a25 = 350 req/m (if this works then maybe i will use this in prod)
 - https://rapidapi.com/nikzeferis/api/youtube-captions-transcript-subtitles-video-combiner/playground/apiendpoint_dccbec3e-efe7-4016-ba37-3f5e45b49999 = 100 req/m
-
-## Frontend
-- Must Use polling in chatting to fetch `/chat/history/:chatId`
-- *OAuth intregation will think later*

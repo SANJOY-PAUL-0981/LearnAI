@@ -47,6 +47,14 @@ const chatSchema = new Schema({
         ref: 'user',
         index: true,
     },
+    isPublic: {
+        type: Boolean,
+        default: false
+    },
+    publicId: {
+        type: String, 
+        unique: true
+    },
     videoTitle: {
         type: String
     },
