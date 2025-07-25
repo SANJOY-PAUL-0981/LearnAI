@@ -47,6 +47,9 @@ const chatSchema = new Schema({
         ref: 'user',
         index: true,
     },
+    videoTitle: {
+        type: String
+    },
     transcription: {
         type: String,
     },

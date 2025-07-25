@@ -10,9 +10,11 @@ This is learn AI, chat with Youtube videos and learn more efficiently
 6. `POST: /chat/send` (response = userQuestion & aiResponse)
 7. `GET: /chat/all` (response = userChats)
 8. `GET: /chat/history/:chatId` (response = chat)
-9. `DELETE: /chat/delete/:chatId` (response = "Chat successfully deleted"
+9. `DELETE: /chat/delete/:chatId` (response = "Chat successfully deleted")
+10. `PUT: /chat/rename/:chatId` (response = new title)
 *OAuth intregation will think later*
-
+*Let User download the chat conversation*
+*add share chat like chatgpt*
 ### API Resources
 YouTube Transcript APIs from RapidAPI:
 (Not sure about all of them working, i can change gmail and create a API always)

@@ -222,6 +222,26 @@ chatRouter.delete("/delete/:chatId", userMiddleware, async (req, res) => {
     }
 })
 
+// rename title
+chatRouter.put("/rename/:chatId", userMiddleware, async (req, res) => {
+    const userId = req.userId
+    const chatId = req.params.chatId
+    const videoTitle = req.body.videoTitle
+
+    const rename = await chatModel.findOneAndUpdate(
+        { userId: userId, _id: chatId },           
+        { $set: { videoTitle: videoTitle } },      
+        { new: true }                              
+    );
+
+    const title = rename.videoTitle
+
+    res.json({
+        message: "Title renamed successfully",
+        title
+    })
+})
+
 module.exports = ({
     chatRouter: chatRouter
 })

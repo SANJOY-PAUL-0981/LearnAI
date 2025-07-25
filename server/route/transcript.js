@@ -6,6 +6,7 @@ const { GoogleGenAI } = require("@google/genai")
 const { PDFDocument } = require("pdfkit")
 const { GEMINI_API } = require("../config")
 const { RAPID_API_KEY } = require("../config")
+const { YOUTUBE_API } = require("../config")
 
 transcriptRouter = Router()
 const ai = new GoogleGenAI({
@@ -14,21 +15,42 @@ const ai = new GoogleGenAI({
 
 // Fetch transcript and save route
 transcriptRouter.post("/create", userMiddleware, async (req, res) => {
+    const { videoUrl } = req.body;
+    const userId = req.userId;
 
-    // taking input
-    const { videoUrl } = req.body
-    const userId = req.userId
-
-    // checking video availablity
     if (!videoUrl) {
         return res.status(400).json({
             error: "Enter Video URL",
             code: 400
-        })
+        });
+    }
+
+    function extractVideoId(url) {
+        const regex =
+            /(?:youtube\.com.*[?&]v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+        const match = url.match(regex);
+        return match ? match[1] : null;
+    }
+
+    const videoId = extractVideoId(videoUrl);
+
+    if (!videoId) {
+        return res.status(400).json({
+            error: "Invalid YouTube URL",
+            code: 400
+        });
+    }
+
+    let videoTitle = "";
+    try {
+        const apiRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${YOUTUBE_API}`);
+        const data = await apiRes.json();
+        videoTitle = data.items?.[0]?.snippet?.title || "Untitled Video";
+    } catch (err) {
+        console.error("Error fetching video title:", err);
     }
 
     try {
-        // API call for transcription
         const options = {
             method: 'GET',
             url: 'https://fetch-youtube-transcript1.p.rapidapi.com/transcript-with-url',
@@ -42,35 +64,33 @@ transcriptRouter.post("/create", userMiddleware, async (req, res) => {
             }
         };
 
-        const response = await axios.request(options)
-        const transcript = response.data.transcript
+        const response = await axios.request(options);
+        const transcript = response.data.transcript;
 
-        // transcription availabilty check
         if (!transcript || transcript.trim() === "") {
             return res.status(404).json({
                 message: "Transcription not found",
                 code: 404
-            })
+            });
         }
 
         const chat = await chatModel.create({
-            userId: userId,
-            transcription: transcript
-        })
-
-        const chatId = chat._id
+            userId,
+            transcription: transcript,
+            videoTitle
+        });
 
         return res.json({
-            chatId,
+            chatId: chat._id,
             chat
-        })
+        });
     } catch (err) {
         return res.status(500).json({
             message: "Failed to fetch transcript",
             error: err.message
-        })
+        });
     }
-})
+});
 
 // transcript summarizer
 transcriptRouter.get("/summarize/:chatId", userMiddleware, async (req, res) => {
