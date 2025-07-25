@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export const Footer = () => {
     return (
-        <div className="border-t border-white/30 flex justify-between p-5 px-20">
+        <div className="flex justify-between p-5 px-20">
             <Link
                 to="/"
                 className="flex gap-2 items-center cursor-pointer">
