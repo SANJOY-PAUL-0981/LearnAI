@@ -7,7 +7,7 @@ import { FaPen } from "react-icons/fa6";
 import { FaRegFilePdf } from "react-icons/fa6";
 import { BeatLoader } from "react-spinners"
 
-export const Sidebar = ({onChatSelect}) => {
+export const Sidebar = ({ onChatSelect }) => {
     const [chats, setChats] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [videoUrl, setVideoUrl] = useState("");
@@ -15,6 +15,7 @@ export const Sidebar = ({onChatSelect}) => {
     const [renamingId, setRenamingId] = useState(null);
     const [newTitle, setNewTitle] = useState("");
     const [loadingChatId, setLoadingChatId] = useState(null);
+    const [creating, setCreating] = useState(false);
 
     const menuRef = useRef(null);
 
@@ -37,6 +38,7 @@ export const Sidebar = ({onChatSelect}) => {
 
     const handleNewChat = async () => {
         try {
+            setCreating(true);
             const res = await axios.post(
                 "http://localhost:3000/api/v1/transcript/create",
                 { videoUrl },
@@ -58,6 +60,8 @@ export const Sidebar = ({onChatSelect}) => {
             }
         } catch (err) {
             console.error("Error creating chat:", err);
+        } finally {
+            setCreating(false)
         }
     };
 
@@ -268,10 +272,11 @@ export const Sidebar = ({onChatSelect}) => {
                                 Cancel
                             </button>
                             <button
-                                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
+                                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg disabled:opacity-50"
                                 onClick={handleNewChat}
+                                disabled={creating}
                             >
-                                Start Chat
+                                {creating ? "Creating..." : "Start Chat"}
                             </button>
                         </div>
                     </div>

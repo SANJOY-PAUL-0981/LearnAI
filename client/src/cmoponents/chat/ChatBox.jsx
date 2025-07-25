@@ -5,8 +5,9 @@ export const ChatBox = ({ messages, chatId }) => {
   const [input, setInput] = useState("");
   const [chatMessages, setChatMessages] = useState([]);
   const scrollRef = useRef(null);
+  const [isTyping, setIsTyping] = useState(false);
 
-  // Update chatMessages when messages or chatId changes (e.g., new chat selected)
+  // Update chatMessages when message done
   useEffect(() => {
     setChatMessages(messages || []);
   }, [messages, chatId]);
@@ -15,6 +16,7 @@ export const ChatBox = ({ messages, chatId }) => {
     if (!input.trim() || !chatId) return;
 
     try {
+      setIsTyping(true);
       const res = await axios.post(
         "http://localhost:3000/api/v1/chat/send",
         {
@@ -37,11 +39,13 @@ export const ChatBox = ({ messages, chatId }) => {
       setInput("");
     } catch (err) {
       console.error("Error sending message:", err);
+    } finally {
+      setIsTyping(false);
     }
   };
 
   useEffect(() => {
-    // Scroll to bottom when new messages are added
+    // Scroll to bottom when new messages are added AI did
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
@@ -57,15 +61,21 @@ export const ChatBox = ({ messages, chatId }) => {
         {chatMessages.map((msg, idx) => (
           <div
             key={idx}
-            className={`max-w-[80%] px-4 py-2 rounded-2xl text-sm whitespace-pre-wrap ${
-              msg.role === "user"
-                ? "bg-green-700 ml-auto text-right"
-                : "bg-[#2a2a2a] mr-auto text-left"
-            }`}
+            className={`max-w-[80%] px-4 py-2 rounded-2xl text-sm whitespace-pre-wrap ${msg.role === "user"
+              ? "bg-green-700 ml-auto text-right"
+              : "bg-[#2a2a2a] mr-auto text-left"
+              }`}
           >
             {msg.content}
           </div>
         ))}
+
+        {isTyping && (
+          <div className="bg-[#2a2a2a] text-white text-sm px-4 py-2 rounded-2xl max-w-[80%] mr-auto animate-pulse">
+            Typing...
+          </div>
+        )}
+
       </div>
 
       {/* Input Section Fixed at Bottom */}
