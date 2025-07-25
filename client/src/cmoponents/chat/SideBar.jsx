@@ -7,7 +7,7 @@ import { FaPen } from "react-icons/fa6";
 import { FaRegFilePdf } from "react-icons/fa6";
 import { BeatLoader } from "react-spinners"
 
-export const Sidebar = () => {
+export const Sidebar = ({onChatSelect}) => {
     const [chats, setChats] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [videoUrl, setVideoUrl] = useState("");
@@ -37,7 +37,7 @@ export const Sidebar = () => {
 
     const handleNewChat = async () => {
         try {
-            await axios.post(
+            const res = await axios.post(
                 "http://localhost:3000/api/v1/transcript/create",
                 { videoUrl },
                 {
@@ -47,13 +47,20 @@ export const Sidebar = () => {
                     },
                 }
             );
+
+            const newChat = res.data.chat;
             setVideoUrl("");
             setShowModal(false);
             fetchChats();
+
+            if (onChatSelect) {
+                onChatSelect(newChat._id);
+            }
         } catch (err) {
             console.error("Error creating chat:", err);
         }
     };
+
 
     const handleDelete = async (chatId) => {
         try {
@@ -163,6 +170,7 @@ export const Sidebar = () => {
                         chats.map((chat) => (
                             <div
                                 key={chat._id}
+                                onClick={() => onChatSelect(chat._id)}
                                 className="relative group text-sm hover:bg-[#2a2a2a] px-2 py-2 rounded-lg cursor-pointer flex justify-between items-center"
                             >
                                 {renamingId === chat._id ? (

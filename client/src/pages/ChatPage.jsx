@@ -1,31 +1,59 @@
+import { useState } from "react";
 import { Navbar } from "../cmoponents/Navbar";
 import { Sidebar } from "../cmoponents/chat/SideBar";
 import { ChatBox } from "../cmoponents/chat/ChatBox";
+import axios from "axios";
 
 export const ChatPage = () => {
+    const [selectedChatId, setSelectedChatId] = useState(null);
+    const [chatHistory, setChatHistory] = useState([]);
+    const [messages, setMessages] = useState([]);
+
+    const handleChatSelect = async (chatId) => {
+        try {
+            console.log("Fetching history for chatId:", chatId);
+
+            const res = await axios.get(`http://localhost:3000/api/v1/chat/history/${chatId}`, {
+                headers: {
+                    token: localStorage.getItem("token"),
+                },
+            });
+
+            console.log("Response from server:", res.data);
+
+            const messages = res.data.chat.messages;
+            setSelectedChatId(chatId);
+            setMessages(messages);
+        } catch (err) {
+            console.error("Failed to fetch chat history:", err);
+        }
+    };
+
+
+
     return (
         <div className="bg-[#161616] h-dvh w-dvw text-white overflow-x-hidden flex">
-
-            {/* Left Sidebar */}
+            {/* Sidebar */}
             <div className="w-72 bg-[#090909]">
-                <Sidebar />
+                <Sidebar onChatSelect={handleChatSelect} />
             </div>
 
-            {/* Main Content Area */}
+            {/* Main content */}
             <div className="flex-1 flex flex-col justify-between">
                 <Navbar />
 
-                <div className="p-4 text-center flex flex-col gap-2">
-                    <h1 className="text-7xl font-xanh from-[#e0e0e0] to-[#7e7e7e] bg-gradient-to-b bg-clip-text text-transparent">Let's Start Learning</h1>
-                    <p className="text-sm text-white/75">Click on the <b>New Chat</b> from sidebar.</p>
-                </div>
-
-                <div className="text-white/80 text-xs font-poppins text-center p-2">
-                    <ChatBox />
-                    LearnAI also can make mistakes.
-                </div>
+                {selectedChatId ? (
+                    <div className="text-white/80 text-xs font-poppins text-center p-2">
+                        <ChatBox messages={messages} chatId={selectedChatId} />
+                        LearnAI also can make mistakes.
+                    </div>
+                ) : (
+                    <div className="p-4 text-center flex flex-col gap-2">
+                        <h1 className="text-7xl font-xanh from-[#e0e0e0] to-[#7e7e7e] bg-gradient-to-b bg-clip-text text-transparent">Let's Start Learning</h1>
+                        <p className="text-sm text-white/75">Click on the <b>New Chat</b> from sidebar.</p>
+                    </div>
+                )}
             </div>
-
         </div>
     );
 };

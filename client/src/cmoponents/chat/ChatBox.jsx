@@ -1,21 +1,89 @@
-import { BsSend } from "react-icons/bs";
+import { useState, useEffect, useRef } from "react";
+import axios from "axios";
 
-export const ChatBox = () => {
+export const ChatBox = ({ messages, chatId }) => {
+  const [input, setInput] = useState("");
+  const [chatMessages, setChatMessages] = useState([]);
+  const scrollRef = useRef(null);
+
+  // Update chatMessages when messages or chatId changes (e.g., new chat selected)
+  useEffect(() => {
+    setChatMessages(messages || []);
+  }, [messages, chatId]);
+
+  const handleSend = async () => {
+    if (!input.trim() || !chatId) return;
+
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/api/v1/chat/send",
+        {
+          role: "user",
+          content: input,
+          chatId,
+        },
+        {
+          headers: {
+            token: localStorage.getItem("token"),
+          },
+        }
+      );
+
+      setChatMessages((prev) => [
+        ...prev,
+        { role: "user", content: res.data.userQuestion },
+        { role: "ai", content: res.data.aiResponse },
+      ]);
+      setInput("");
+    } catch (err) {
+      console.error("Error sending message:", err);
+    }
+  };
+
+  useEffect(() => {
+    // Scroll to bottom when new messages are added
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [chatMessages]);
+
   return (
-    <div className="flex justify-center">
-      <div className="relative w-[45vw]">
-        <textarea
-          rows={4}
-          className="w-full h-[15vh] resize-none rounded-4xl px-6 pr-12 py-5 text-base mb-2 border border-white/20 bg-white/5 text-white overflow-y-auto"
-          placeholder="Ask Anything"
-        />
+    <div className="relative h-full">
+      {/* Message Display Section */}
+      <div
+        ref={scrollRef}
+        className="overflow-y-auto px-4 pb-32 pt-4 h-full space-y-4 text-white"
+      >
+        {chatMessages.map((msg, idx) => (
+          <div
+            key={idx}
+            className={`max-w-[80%] px-4 py-2 rounded-2xl text-sm whitespace-pre-wrap ${
+              msg.role === "user"
+                ? "bg-green-700 ml-auto text-right"
+                : "bg-[#2a2a2a] mr-auto text-left"
+            }`}
+          >
+            {msg.content}
+          </div>
+        ))}
+      </div>
 
-        <button
-          className="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300"
-          type="submit"
-        >
-          <BsSend size={20} />
-        </button>
+      {/* Input Section Fixed at Bottom */}
+      <div className="absolute bottom-0 left-0 w-full bg-black p-4 border-t border-white/10">
+        <div className="flex gap-2">
+          <input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Ask something..."
+            className="flex-1 px-4 py-2 rounded-full bg-[#2a2a2a] text-white placeholder-white/50 focus:outline-none"
+          />
+          <button
+            onClick={handleSend}
+            className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-full font-medium text-white"
+          >
+            Send
+          </button>
+        </div>
       </div>
     </div>
   );
