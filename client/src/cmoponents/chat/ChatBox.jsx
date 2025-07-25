@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef } from "react";
+import { BsSend } from "react-icons/bs";
 import axios from "axios";
 
 export const ChatBox = ({ messages, chatId }) => {
   const [input, setInput] = useState("");
   const [chatMessages, setChatMessages] = useState([]);
-  const scrollRef = useRef(null);
   const [isTyping, setIsTyping] = useState(false);
+  const scrollRef = useRef(null);
 
-  // Update chatMessages when message done
   useEffect(() => {
     setChatMessages(messages || []);
   }, [messages, chatId]);
@@ -17,6 +17,7 @@ export const ChatBox = ({ messages, chatId }) => {
 
     try {
       setIsTyping(true);
+
       const res = await axios.post(
         "http://localhost:3000/api/v1/chat/send",
         {
@@ -45,25 +46,24 @@ export const ChatBox = ({ messages, chatId }) => {
   };
 
   useEffect(() => {
-    // Scroll to bottom when new messages are added AI did
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [chatMessages]);
+  }, [chatMessages, isTyping]);
 
   return (
-    <div className="relative h-full">
-      {/* Message Display Section */}
+    <div className="flex flex-col h-full overflow-hidden">
+      {/* Message Area */}
       <div
         ref={scrollRef}
-        className="overflow-y-auto px-4 pb-32 pt-4 h-full space-y-4 text-white"
+        className="flex-1 overflow-y-auto px-4 pb-4 pt-4 space-y-4 text-white"
       >
         {chatMessages.map((msg, idx) => (
           <div
             key={idx}
             className={`max-w-[80%] px-4 py-2 rounded-2xl text-sm whitespace-pre-wrap ${msg.role === "user"
-              ? "bg-green-700 ml-auto text-right"
-              : "bg-[#2a2a2a] mr-auto text-left"
+              ? "bg-white/20 w-[40%] shadow-md ml-auto text-right"
+              : "bg-[#2a2a2a] w-[60%] mr-auto text-left"
               }`}
           >
             {msg.content}
@@ -71,27 +71,28 @@ export const ChatBox = ({ messages, chatId }) => {
         ))}
 
         {isTyping && (
-          <div className="bg-[#2a2a2a] text-white text-sm px-4 py-2 rounded-2xl max-w-[80%] mr-auto animate-pulse">
+          <div className="text-white text-sm px-4 py-2 rounded-2xl max-w-[80%] mr-auto animate-pulse">
             Typing...
           </div>
         )}
-
       </div>
 
-      {/* Input Section Fixed at Bottom */}
-      <div className="absolute bottom-0 left-0 w-full bg-black p-4 border-t border-white/10">
-        <div className="flex gap-2">
-          <input
+      <div className="flex justify-center py-1">
+        <div className="relative w-[45vw]">
+          <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask something..."
-            className="flex-1 px-4 py-2 rounded-full bg-[#2a2a2a] text-white placeholder-white/50 focus:outline-none"
+            rows={4}
+            className="w-full h-[15vh] resize-none rounded-4xl px-6 pr-12 py-5 text-base mb-2 border border-white/20 bg-white/5 text-white overflow-y-auto"
+            placeholder="Ask Anything"
           />
+
           <button
             onClick={handleSend}
-            className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-full font-medium text-white"
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300"
+            type="submit"
           >
-            Send
+            <BsSend size={20} />
           </button>
         </div>
       </div>
