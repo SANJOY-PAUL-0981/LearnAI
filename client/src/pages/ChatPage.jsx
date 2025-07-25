@@ -1,12 +1,13 @@
 import { Navbar } from "../cmoponents/Navbar";
 import { Sidebar } from "../cmoponents/chat/SideBar";
+import { ChatBox } from "../cmoponents/chat/ChatBox";
 
 export const ChatPage = () => {
     return (
         <div className="bg-[#161616] h-dvh w-dvw text-white overflow-x-hidden flex">
 
             {/* Left Sidebar */}
-            <div className="w-64 bg-[#090909]">
+            <div className="w-72 bg-[#090909]">
                 <Sidebar />
             </div>
 
@@ -19,7 +20,8 @@ export const ChatPage = () => {
                     <p className="text-sm text-white/75">Click on the <b>New Chat</b> from sidebar.</p>
                 </div>
 
-                <div className="text-white/80 text-xs font-poppins text-center">
+                <div className="text-white/80 text-xs font-poppins text-center p-2">
+                    <ChatBox />
                     LearnAI also can make mistakes.
                 </div>
             </div>
