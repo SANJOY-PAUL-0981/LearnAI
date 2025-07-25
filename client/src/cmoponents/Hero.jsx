@@ -1,4 +1,5 @@
 import { HiOutlineLightningBolt } from "react-icons/hi";
+import { Link } from "react-router-dom";
 
 export const Hero = () => {
     return (
@@ -20,9 +21,11 @@ export const Hero = () => {
                     Transform your learning experience with LearnAI. Ask questions, get instant answers, and dive deeper into any YouTube video content with our AI-powered chat interface.
                 </div>
                 <div className="flex gap-5">
-                    <button className="border p-2 px-8 rounded-4xl font-poppins bg-white text-black font-semibold cursor-pointer">
+                    <Link 
+                    to="/auth"
+                    className="border p-2 px-8 rounded-4xl font-poppins bg-white text-black font-semibold cursor-pointer">
                         Try LearnAI
-                    </button>
+                    </Link>
                     <button className="border p-2 px-6 rounded-4xl font-poppins border-white/30 bg-white/10 backdrop-blur-md shadow-md cursor-pointer">
                         Watch Demo
                     </button>

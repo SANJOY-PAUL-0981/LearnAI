@@ -3,16 +3,18 @@ import { LuEyeClosed } from "react-icons/lu";
 import { useState } from "react";
 import axios from "axios"
 import {ClipLoader} from "react-spinners"
+import { useNavigate } from "react-router-dom";
 
 export const Signup = ({ setAuthType }) => {
     const [showPassword, setShowPassword] = useState(false)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState("")
-    const [message, setMessage] = useState("")
 
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+
+    const navigate = useNavigate()
 
     const handelSignup = async () => {
         setLoading(true)
@@ -28,8 +30,7 @@ export const Signup = ({ setAuthType }) => {
             // If signup is successful
             if (response.status === 200) {
                 localStorage.setItem("token", data.token);
-                setMessage("Signup successful!");
-                alert("Signup done");
+                navigate("/chat")
             } else {
                 setError("Signup failed. Please try again.");
             }
@@ -107,16 +108,14 @@ export const Signup = ({ setAuthType }) => {
                 <div className="text-sm flex gap-2 justify-center items-center">
                     <p className="text-white/50">Already have an account?</p>
                     <p className="text-white cursor-pointer font-medium hover:underline"
-                        onClick={() => setAuthType("login")}>
+                        onClick={() => navigate("/auth?type=login")}>
                         Log in
                     </p>
                 </div>
             </div>
+
             {/*error*/}
             {error && <p className="text-red-500 border-red-500/25 border text-center p-3 rounded-lg text-sm bg-white/5 backdrop-blur-md shadow-md">⚠️   Error: {error}</p>}
-
-            {/*success*/}
-            {message && <p className="text-green-500 border-green-500/20 border text-center p-3 rounded-lg font-semibold  bg-white/5 backdrop-blur-md shadow-md">✨   {message}</p>}
         </div>
     )
 }
