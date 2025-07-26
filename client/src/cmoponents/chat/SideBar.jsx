@@ -24,6 +24,7 @@ export const Sidebar = ({ onChatSelect }) => {
     const [creatingChatId, setCreatingChatId] = useState(null)
     const [creating, setCreating] = useState(false);
     const [linkCreating, setLinkCreating] = useState(null)
+    const [publicLink, setPublicLink] = useState("")
 
     const menuRef = useRef(null);
 
@@ -209,10 +210,8 @@ export const Sidebar = ({ onChatSelect }) => {
             );
 
             const publicLink = res.data.publicLink;
-            navigator.clipboard.writeText(publicLink);
-            alert("Public link copied to clipboard:\n" + publicLink);
+            setPublicLink(publicLink);
 
-            setShowShareModal(false);
         } catch (error) {
             console.error("Error creating public link:", error);
             alert("Failed to create link");
@@ -222,6 +221,11 @@ export const Sidebar = ({ onChatSelect }) => {
         }
     };
 
+    const openShareModal = (chatId) => {
+        setLinkCreating(chatId);
+        setPublicLink("");           
+        setShowShareModal(true);     
+    };
 
 
     return (
@@ -329,6 +333,7 @@ export const Sidebar = ({ onChatSelect }) => {
                                                 onClick={() => {
                                                     setShowShareModal(true);
                                                     setLinkCreating(chat._id);
+                                                    openShareModal(chat._id);
                                                 }}
                                                 className="w-full flex items-center gap-2 text-left px-3 py-2 rounded-lg hover:bg-[#3a3a3a]">
                                                 <FaShare size={17} /> Share Chat
@@ -392,7 +397,9 @@ export const Sidebar = ({ onChatSelect }) => {
                         <div className="bg-[#1a1a1a] p-6 rounded-3xl w-[90%] h-[40%] max-w-xl flex flex-col justify-between">
                             <div className="text-lg flex items-center justify-between">
                                 <p>Share public link to the chat</p>
-                                <button className="cursor-pointer">
+                                <button
+                                    onClick={() => setShowShareModal(false)}
+                                    className="cursor-pointer">
                                     <RxCross1 size={17} />
                                 </button>
                             </div>
@@ -412,7 +419,10 @@ export const Sidebar = ({ onChatSelect }) => {
                                 </div>
                             </div>
 
-                            <div className="border flex justify-end p-2 border-white/30 rounded-full">
+                            <div className="border flex justify-end gap-5 p-2 border-white/30 rounded-full">
+                                <div className="flex items-center text-white/80">
+                                    {publicLink}
+                                </div>
                                 <button
                                     onClick={handlePublicLink}
                                     className="border flex items-center gap-1 font-semibold py-3 px-4 rounded-full text-lg cursor-pointer bg-white text-black"
