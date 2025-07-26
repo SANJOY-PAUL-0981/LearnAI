@@ -6,6 +6,8 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaPen } from "react-icons/fa6";
 import { FaRegFilePdf } from "react-icons/fa6";
 import { BeatLoader } from "react-spinners"
+import { FaDownload } from "react-icons/fa6";
+import { FaShare } from "react-icons/fa";
 
 export const Sidebar = ({ onChatSelect }) => {
     const [chats, setChats] = useState([]);
@@ -211,16 +213,18 @@ export const Sidebar = ({ onChatSelect }) => {
 
 
                                     {menuOpenId === chat._id && (
-                                        <div className="absolute right-0 top-6 bg-[#2a2a2a] border border-white/10 rounded-xl p-1 shadow-lg z-20 w-32 text-sm chat-menu-dropdown">
+                                        <div className="absolute right-0 top-6 bg-[#2a2a2a] border border-white/10 rounded-xl p-1 shadow-lg z-20 w-40 text-sm chat-menu-dropdown">
+                                            {/*rename*/}
                                             <button
-                                                className="w-full text-left flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#3a3a3a]"
+                                                className="w-full text-left flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-[#3a3a3a]"
                                                 onClick={() => handelRename(chat)}
                                             >
                                                 <FaPen />Rename
                                             </button>
 
+                                            {/*summary*/}
                                             <button
-                                                className="w-full flex items-center gap-2 text-left px-4 py-2 rounded-lg hover:bg-[#3a3a3a]"
+                                                className="w-full flex items-center gap-2 text-left px-3 py-2 rounded-lg hover:bg-[#3a3a3a]"
                                                 onClick={() => handleSummaryDownload(chat._id)}
                                             >
                                                 {loadingChatId === chat._id ? (
@@ -235,8 +239,19 @@ export const Sidebar = ({ onChatSelect }) => {
                                                 )}
                                             </button>
 
+                                            {/*convo download*/}
+                                            <button className="w-full flex items-center gap-2 text-left pl-3 pr-2 py-2 rounded-lg hover:bg-[#3a3a3a]">
+                                                <FaDownload size={17} />Download Chat
+                                            </button>
+
+                                            {/*share chat*/}
+                                            <button className="w-full flex items-center gap-2 text-left px-3 py-2 rounded-lg hover:bg-[#3a3a3a]">
+                                                <FaShare size={17} /> Share Chat
+                                            </button>
+
+                                            {/*delete*/}
                                             <button
-                                                className="w-full flex items-center gap-2 text-left px-4 py-2 rounded-lg hover:bg-red-600/15 text-red-400"
+                                                className="w-full flex items-center gap-2 text-left px-3 py-2 rounded-lg hover:bg-red-600/15 text-red-400"
                                                 onClick={() => handleDelete(chat._id)}
                                             >
                                                 <RiDeleteBin6Line size={17} />Delete

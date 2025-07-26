@@ -61,9 +61,9 @@ export const ChatBox = ({ messages, chatId }) => {
         {chatMessages.map((msg, idx) => (
           <div
             key={idx}
-            className={`max-w-[80%] px-4 py-2 rounded-2xl text-sm whitespace-pre-wrap ${msg.role === "user"
-              ? "bg-white/20 w-[40%] shadow-md ml-auto text-right"
-              : "bg-[#2a2a2a] w-[60%] mr-auto text-left"
+            className={`px-4 py-2 rounded-2xl text-sm whitespace-pre-wrap ${msg.role === "user"
+              ? "bg-white/20 w-fit max-w-[40%] shadow-md ml-auto text-left"
+              : "bg-[#2a2a2a] w-fit max-w-[60%] mr-auto text-left"
               }`}
           >
             {msg.content}
