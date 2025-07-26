@@ -1,22 +1,5 @@
 # LearnAI
 This is learn AI, chat with Youtube videos and learn more efficiently
-## Backend
-### Backend Routes:
-1. `POST: /user/signup` (response = token)
-2. `POST: /user/login` (response = token)
-3. `GET: /user/userInfo` (response = user)
-4. `POST: /transcript/create` (response = chat & chatId)
-5. `GET: /transcript/summarize/:chatId` (response = summary pdf)
-6. `POST: /chat/send` (response = userQuestion & aiResponse)
-7. `GET: /chat/all` (response = userChats)
-8. `GET: /chat/history/:chatId` (response = chat)
-9. `DELETE: /chat/delete/:chatId` (response = "Chat successfully deleted")
-10. `PUT: /chat/rename/:chatId` (response = new title)
-11. `POST: /chat/share/:chatId` (response = public link)
-12. `GET: /chat/public/:publicId` (response = public chat)
-
-- *Let User download the chat conversation* = backend route created
-- *add share chat like chatgpt* = added on backend
 ### API Resources
 YouTube Transcript APIs from RapidAPI:
 (Not sure about all of them working, i can change gmail and create a API always)
@@ -26,3 +9,9 @@ YouTube Transcript APIs from RapidAPI:
 - https://rapidapi.com/Reza-Rg/api/youtube-transcribe-fastest-youtube-transcriber/playground/apiendpoint_f9008f6e-74cc-44eb-a262-64f838b70f84 = 100 req/m
 - https://rapidapi.com/rahilkhan224/api/youtube-video-summarizer-gpt-ai/playground/apiendpoint_92423465-6a0a-4355-a595-90014cd90a25 = 350 req/m (if this works then maybe i will use this in prod)
 - https://rapidapi.com/nikzeferis/api/youtube-captions-transcript-subtitles-video-combiner/playground/apiendpoint_dccbec3e-efe7-4016-ba37-3f5e45b49999 = 100 req/m
+
+## License
+
+Learn AI is licensed under the Apache License 2.0.  
+You are free to use and contribute, but must provide proper attribution.  
+Please do not remove the original author’s credit.

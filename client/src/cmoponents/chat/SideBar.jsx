@@ -141,6 +141,10 @@ export const Sidebar = ({ onChatSelect }) => {
         }
     };
 
+    const handelChatDownload = async (chatId) => {
+
+    }
+
 
     useEffect(() => {
         const handleClickOutside = (e) => {
@@ -240,8 +244,19 @@ export const Sidebar = ({ onChatSelect }) => {
                                             </button>
 
                                             {/*convo download*/}
-                                            <button className="w-full flex items-center gap-2 text-left pl-3 pr-2 py-2 rounded-lg hover:bg-[#3a3a3a]">
-                                                <FaDownload size={17} />Download Chat
+                                            <button
+                                            onClick={() => handelChatDownload(chat._id)} 
+                                            className="w-full flex items-center gap-2 text-left pl-3 pr-2 py-2 rounded-lg hover:bg-[#3a3a3a]">
+                                                {loadingChatId === chat._id ? (
+                                                    <span className="flex items-center gap-1">
+                                                        <BeatLoader color="white" size={5} speedMultiplier={0.5} />
+                                                    </span>
+                                                ) : (
+                                                    <span className="flex items-center gap-1">
+                                                        <FaDownload size={17} />
+                                                        Download Chat
+                                                    </span>
+                                                )}
                                             </button>
 
                                             {/*share chat*/}
