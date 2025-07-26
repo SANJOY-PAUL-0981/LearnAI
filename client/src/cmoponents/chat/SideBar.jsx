@@ -5,13 +5,17 @@ import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaPen } from "react-icons/fa6";
 import { FaRegFilePdf } from "react-icons/fa6";
-import { BeatLoader } from "react-spinners"
+import { BeatLoader, MoonLoader } from "react-spinners"
 import { FaDownload } from "react-icons/fa6";
 import { FaShare } from "react-icons/fa";
+import { FaLink } from "react-icons/fa6";
+import { GiInfo } from "react-icons/gi";
+import { RxCross1 } from "react-icons/rx";
 
 export const Sidebar = ({ onChatSelect }) => {
     const [chats, setChats] = useState([]);
     const [showModal, setShowModal] = useState(false);
+    const [showShareModal, setShowShareModal] = useState(false);
     const [videoUrl, setVideoUrl] = useState("");
     const [menuOpenId, setMenuOpenId] = useState(null);
     const [renamingId, setRenamingId] = useState(null);
@@ -19,6 +23,7 @@ export const Sidebar = ({ onChatSelect }) => {
     const [loadingChatId, setLoadingChatId] = useState(null);
     const [creatingChatId, setCreatingChatId] = useState(null)
     const [creating, setCreating] = useState(false);
+    const [linkCreating, setLinkCreating] = useState(null)
 
     const menuRef = useRef(null);
 
@@ -187,6 +192,37 @@ export const Sidebar = ({ onChatSelect }) => {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
+    const handlePublicLink = async () => {
+        if (!linkCreating) return;
+
+        try {
+            setCreating(true);
+
+            const res = await axios.post(
+                `http://localhost:3000/api/v1/chat/share/${linkCreating}`,
+                {},
+                {
+                    headers: {
+                        token: localStorage.getItem("token"),
+                    },
+                }
+            );
+
+            const publicLink = res.data.publicLink;
+            navigator.clipboard.writeText(publicLink);
+            alert("Public link copied to clipboard:\n" + publicLink);
+
+            setShowShareModal(false);
+        } catch (error) {
+            console.error("Error creating public link:", error);
+            alert("Failed to create link");
+        } finally {
+            setCreating(false);
+            setLinkCreating(null);
+        }
+    };
+
+
 
     return (
         <div className="pt-15 px-3 h-dvh overflow-y-auto text-white">
@@ -289,7 +325,12 @@ export const Sidebar = ({ onChatSelect }) => {
                                             </button>
 
                                             {/*share chat*/}
-                                            <button className="w-full flex items-center gap-2 text-left px-3 py-2 rounded-lg hover:bg-[#3a3a3a]">
+                                            <button
+                                                onClick={() => {
+                                                    setShowShareModal(true);
+                                                    setLinkCreating(chat._id);
+                                                }}
+                                                className="w-full flex items-center gap-2 text-left px-3 py-2 rounded-lg hover:bg-[#3a3a3a]">
                                                 <FaShare size={17} /> Share Chat
                                             </button>
 
@@ -309,38 +350,86 @@ export const Sidebar = ({ onChatSelect }) => {
                 </div>
             </div>
 
-            {/* Modal */}
-            {showModal && (
-                <div className="fixed inset-0 bg-black/60 z-50 flex justify-center items-center">
-                    <div className="bg-[#1a1a1a] p-6 rounded-xl w-[90%] max-w-md">
-                        <h2 className="text-lg font-semibold text-white mb-4">
-                            Enter YouTube Video URL
-                        </h2>
-                        <input
-                            type="text"
-                            className="w-full p-2 rounded-lg bg-[#2a2a2a] text-white mb-4"
-                            placeholder="https://youtube.com/watch?v=..."
-                            value={videoUrl}
-                            onChange={(e) => setVideoUrl(e.target.value)}
-                        />
-                        <div className="flex justify-end gap-3">
-                            <button
-                                className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg"
-                                onClick={() => setShowModal(false)}
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg disabled:opacity-50"
-                                onClick={handleNewChat}
-                                disabled={creating}
-                            >
-                                {creating ? "Creating..." : "Start Chat"}
-                            </button>
+            {/* Transcript Modal */}
+            {
+                showModal && (
+                    <div className="fixed inset-0 bg-black/60 z-50 flex justify-center items-center">
+                        <div className="bg-[#1a1a1a] p-6 rounded-xl w-[90%] max-w-md">
+                            <h2 className="text-lg font-semibold text-white mb-4">
+                                Enter YouTube Video URL
+                            </h2>
+                            <input
+                                type="text"
+                                className="w-full p-2 rounded-lg bg-[#2a2a2a] text-white mb-4"
+                                placeholder="https://youtube.com/watch?v=..."
+                                value={videoUrl}
+                                onChange={(e) => setVideoUrl(e.target.value)}
+                            />
+                            <div className="flex justify-end gap-3">
+                                <button
+                                    className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg"
+                                    onClick={() => setShowModal(false)}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg disabled:opacity-50"
+                                    onClick={handleNewChat}
+                                    disabled={creating}
+                                >
+                                    {creating ? "Creating..." : "Start Chat"}
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
-        </div>
+                )
+            }
+
+            {/* Share Modal */}
+            {
+                showShareModal && (
+                    <div className="fixed inset-0 bg-black/60 z-50 flex justify-center items-center">
+                        <div className="bg-[#1a1a1a] p-6 rounded-3xl w-[90%] h-[40%] max-w-xl flex flex-col justify-between">
+                            <div className="text-lg flex items-center justify-between">
+                                <p>Share public link to the chat</p>
+                                <button className="cursor-pointer">
+                                    <RxCross1 size={17} />
+                                </button>
+                            </div>
+
+                            <div className="flex items-center gap-15 rounded-4xl p-4 bg-white/10">
+                                <div>
+                                    <GiInfo size={16} />
+                                </div>
+
+                                <div>
+                                    <p className="font-bold">
+                                        This conversation may include personal information.
+                                    </p>
+                                    <p className="font-light">
+                                        Take a moment to check the content before sharing the link.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="border flex justify-end p-2 border-white/30 rounded-full">
+                                <button
+                                    onClick={handlePublicLink}
+                                    className="border flex items-center gap-1 font-semibold py-3 px-4 rounded-full text-lg cursor-pointer bg-white text-black"
+                                >
+                                    {creating ? (
+                                        <span>Creating link...</span>
+                                    ) : (
+                                        <span className="flex items-center gap-1">
+                                            <FaLink size={20} /> Create Link
+                                        </span>
+                                    )}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+        </div >
     );
 };
