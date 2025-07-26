@@ -9,7 +9,7 @@ const { GEMINI_API } = require("../config")
 const PDFDocument = require('pdfkit');
 const { nanoid } = require('nanoid');
 
-const doc = new PDFDocument();
+
 const ai = new GoogleGenAI({
     apiKey: GEMINI_API
 });
@@ -106,6 +106,7 @@ chatRouter.post("/send", userMiddleware, async (req, res) => {
         2. Or about educational topics like science, math, history, geography, and technology
         3. You can ans question out of the transcription
         4. If the user wants the response in hindi then you should give response in hindi
+        5. The answers must be well explained and cover everything in the question topic, if user asks for explain then explain it with a big response
 
         If the question is unrelated to both the transcript and general education, reply strictly with:
         "I can not answer anything out of education so please ask me anything about science, math etc."
@@ -221,6 +222,8 @@ chatRouter.get("/chat-download/:chatId", userMiddleware, async (req, res) => {
             content: item.content
         }));
 
+        // Create PDF
+        const doc = new PDFDocument({ margin: 50 });
         res.setHeader('Content-Type', 'application/pdf');
         res.setHeader('Content-Disposition', 'attachment; filename=summary.pdf');
 

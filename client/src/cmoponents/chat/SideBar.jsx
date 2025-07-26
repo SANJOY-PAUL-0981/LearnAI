@@ -17,6 +17,7 @@ export const Sidebar = ({ onChatSelect }) => {
     const [renamingId, setRenamingId] = useState(null);
     const [newTitle, setNewTitle] = useState("");
     const [loadingChatId, setLoadingChatId] = useState(null);
+    const [creatingChatId, setCreatingChatId] = useState(null)
     const [creating, setCreating] = useState(false);
 
     const menuRef = useRef(null);
@@ -142,7 +143,35 @@ export const Sidebar = ({ onChatSelect }) => {
     };
 
     const handelChatDownload = async (chatId) => {
+        try {
+            setCreatingChatId(chatId)
 
+            const res = await axios.get(
+                `http://localhost:3000/api/v1/chat/chat-download/${chatId}`,
+                {
+                    headers: {
+                        token: localStorage.getItem("token"),
+                    },
+                    responseType: "blob",
+                }
+            );
+
+            const blob = new Blob([res.data], { type: "application/pdf" });
+            const url = window.URL.createObjectURL(blob);
+
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "chat.pdf";
+            document.body.appendChild(link);
+            link.click();
+
+            window.URL.revokeObjectURL(url);
+            link.remove();
+        } catch (error) {
+            console.error("Error download: ", error)
+        } finally {
+            setCreatingChatId(null)
+        }
     }
 
 
@@ -245,9 +274,9 @@ export const Sidebar = ({ onChatSelect }) => {
 
                                             {/*convo download*/}
                                             <button
-                                            onClick={() => handelChatDownload(chat._id)} 
-                                            className="w-full flex items-center gap-2 text-left pl-3 pr-2 py-2 rounded-lg hover:bg-[#3a3a3a]">
-                                                {loadingChatId === chat._id ? (
+                                                onClick={() => handelChatDownload(chat._id)}
+                                                className="w-full flex items-center gap-2 text-left pl-3 pr-2 py-2 rounded-lg hover:bg-[#3a3a3a]">
+                                                {creatingChatId === chat._id ? (
                                                     <span className="flex items-center gap-1">
                                                         <BeatLoader color="white" size={5} speedMultiplier={0.5} />
                                                     </span>

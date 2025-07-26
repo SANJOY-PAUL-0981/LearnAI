@@ -11,7 +11,6 @@ YouTube Transcript APIs from RapidAPI:
 - https://rapidapi.com/nikzeferis/api/youtube-captions-transcript-subtitles-video-combiner/playground/apiendpoint_dccbec3e-efe7-4016-ba37-3f5e45b49999 = 100 req/m
 
 ## License
-
 Learn AI is licensed under the Apache License 2.0.  
 You are free to use and contribute, but must provide proper attribution.  
 Please do not remove the original author’s credit.
