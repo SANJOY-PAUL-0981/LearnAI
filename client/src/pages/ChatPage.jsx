@@ -7,10 +7,14 @@ import axios from "axios";
 export const ChatPage = () => {
   const [selectedChatId, setSelectedChatId] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const handleChatSelect = async (chatId) => {
     try {
-      console.log("Fetching history for chatId:", chatId);
+      // Clear previous messages and set loading
+      setMessages([]);
+      setSelectedChatId(chatId);
+      setLoading(true);
 
       const res = await axios.get(`http://localhost:3000/api/v1/chat/history/${chatId}`, {
         headers: {
@@ -18,11 +22,11 @@ export const ChatPage = () => {
         },
       });
 
-      console.log("Response from server:", res.data);
-      setSelectedChatId(chatId);
       setMessages(res.data.chat.messages || []);
     } catch (err) {
       console.error("Failed to fetch chat history:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -33,14 +37,24 @@ export const ChatPage = () => {
         <Sidebar onChatSelect={handleChatSelect} />
       </div>
 
-      {/* Main content */}
+      {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <Navbar />
 
         {selectedChatId ? (
           <div className="flex-1 overflow-hidden">
-            <ChatBox messages={messages} chatId={selectedChatId} />
-            <p className="text-xs text-center text-white/40 py-2">LearnAI may sometimes make mistakes.</p>
+            {loading ? (
+              <div className="flex items-center justify-center h-full text-white/50 text-sm">
+                Loading chat...
+              </div>
+            ) : (
+              <>
+                <ChatBox messages={messages} chatId={selectedChatId} />
+                <p className="text-xs text-center text-white/40 py-2">
+                  LearnAI may sometimes make mistakes.
+                </p>
+              </>
+            )}
           </div>
         ) : (
           <div className="p-4 text-center flex flex-col gap-2 items-center justify-center flex-1">
