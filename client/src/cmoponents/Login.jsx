@@ -51,11 +51,11 @@ export const Login = ({ setAuthType }) => {
 
     return (
         <div className="flex flex-col gap-10">
-            <p className="font-bold font-poppins text-3xl text-center">
+            <p className="font-bold font-poppins lg:text-3xl text-2xl text-center">
                 Log in to your account
             </p>
 
-            <div className="flex flex-col gap-5 w-[25vw]">
+            <div className="flex flex-col gap-5 lg:w-[25vw] w-[70vw]">
                 <div className="flex flex-col">
                     <p>
                         Username or Email
