@@ -26,7 +26,7 @@ export const Navbar = () => {
                     <StarBorder
                         onClick={handelLogOut}
                         as="button"
-                        className="custom-class cursor-pointer"
+                        className="custom-class cursor-pointer bg-red-800/30"
                         color="red"
                         speed="5s">
                         Log Out

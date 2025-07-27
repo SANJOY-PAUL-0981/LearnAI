@@ -4,8 +4,8 @@ This is learn AI, chat with Youtube videos and learn more efficiently
 ## Improvements
 - Markdown parse done
 - OAuth integration have to do
-- Change LogOut button
-- All over UI improve in chat section
+- Change LogOut button = done ig
+- All over UI improve in chat section - done ig
 
 ### API Resources
 YouTube Transcript APIs from RapidAPI:

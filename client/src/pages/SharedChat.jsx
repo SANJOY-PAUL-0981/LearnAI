@@ -4,6 +4,7 @@ import axios from "axios";
 import { LuBrain } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import ShinyText from "../cmoponents/ui/ShinyText"
+import MarkdownRenderer from "../cmoponents/ui/MarkdownRenderer"
 
 const SharedChat = () => {
     const { publicId } = useParams();
@@ -41,17 +42,17 @@ const SharedChat = () => {
             </Link>
             <div
                 ref={scrollRef}
-                className="flex-1 overflow-y-auto px-4 pb-4 pt-4 space-y-4 text-white"
+                className="flex-1 overflow-y-auto pb-4 pt-4 space-y-4 text-white px-60"
             >
                 {chatMessages.map((msg, idx) => (
                     <div
                         key={idx}
                         className={`px-4 py-2 rounded-2xl text-sm whitespace-pre-wrap ${msg.role === "user"
                             ? "bg-white/20 w-fit max-w-[40%] shadow-md ml-auto text-left"
-                            : "bg-[#2a2a2a] w-fit max-w-[60%] mr-auto text-left"
+                            : "w-fit max-w-[80%] mr-auto text-left"
                             }`}
                     >
-                        {msg.content}
+                        <MarkdownRenderer content={msg.content} />
                     </div>
                 ))}
             </div>
