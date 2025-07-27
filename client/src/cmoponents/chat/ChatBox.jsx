@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { BsSend } from "react-icons/bs";
 import axios from "axios";
-import MarkdownRenderer from "../ui/MarkdownRenderer"
+import MarkdownRenderer from "../ui/MarkdownRenderer";
 
 export const ChatBox = ({ messages, chatId }) => {
   const [input, setInput] = useState("");
@@ -54,7 +54,6 @@ export const ChatBox = ({ messages, chatId }) => {
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
-      {/* Message Area */}
       <div
         ref={scrollRef}
         className="flex-1 overflow-y-auto px-4 pb-4 pt-4 space-y-4 text-white"
@@ -63,14 +62,13 @@ export const ChatBox = ({ messages, chatId }) => {
           <div
             key={idx}
             className={`px-4 py-2 rounded-2xl text-sm whitespace-pre-wrap ${msg.role === "user"
-              ? "bg-white/20 w-fit max-w-[40%] shadow-md ml-auto text-left"
+              ? "bg-white/20 w-fit max-w-[80%] shadow-md ml-auto text-left"
               : "w-fit max-w-[80%] mr-auto text-left"
               }`}
           >
-            <MarkdownRenderer content={msg.content}/>
+            <MarkdownRenderer content={msg.content} />
           </div>
         ))}
-
         {isTyping && (
           <div className="text-white text-sm px-4 py-2 rounded-2xl max-w-[80%] mr-auto animate-pulse">
             Typing...
@@ -78,16 +76,15 @@ export const ChatBox = ({ messages, chatId }) => {
         )}
       </div>
 
-      <div className="flex justify-center py-1">
-        <div className="relative w-[45vw]">
+      <div className="flex justify-center lg:py-1 py-5">
+        <div className="relative w-[90vw] md:w-[45vw]">
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
             rows={4}
-            className="w-full h-[15vh] resize-none rounded-4xl px-6 pr-12 py-5 text-base mb-2 border border-white/20 bg-white/5 text-white overflow-y-auto"
+            className="w-full lg:h-[15vh] h-[10vh] resize-none rounded-4xl px-6 pr-12 py-5 text-base mb-2 border border-white/20 bg-white/5 text-white overflow-y-auto"
             placeholder="Ask Anything"
           />
-
           <button
             onClick={handleSend}
             className="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300"

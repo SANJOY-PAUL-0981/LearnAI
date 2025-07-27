@@ -11,6 +11,7 @@ import { FaShare } from "react-icons/fa";
 import { FaLink } from "react-icons/fa6";
 import { GiInfo } from "react-icons/gi";
 import { RxCross1 } from "react-icons/rx";
+import { RxExit } from "react-icons/rx";
 
 export const Sidebar = ({ onChatSelect }) => {
     const [chats, setChats] = useState([]);
@@ -223,8 +224,8 @@ export const Sidebar = ({ onChatSelect }) => {
 
     const openShareModal = (chatId) => {
         setLinkCreating(chatId);
-        setPublicLink("");           
-        setShowShareModal(true);     
+        setPublicLink("");
+        setShowShareModal(true);
     };
 
 
@@ -249,34 +250,37 @@ export const Sidebar = ({ onChatSelect }) => {
                         chats.map((chat) => (
                             <div
                                 key={chat._id}
-                                onClick={() => onChatSelect(chat._id)}
                                 className="relative group text-sm hover:bg-[#2a2a2a] px-2 py-2 rounded-lg cursor-pointer flex justify-between items-center"
                             >
-                                {renamingId === chat._id ? (
-                                    <input
-                                        autoFocus
-                                        value={newTitle}
-                                        onChange={(e) => setNewTitle(e.target.value)}
-                                        onBlur={submitRename}
-                                        onKeyDown={(e) => {
-                                            if (e.key === "Enter") submitRename();
-                                            if (e.key === "Escape") {
-                                                setRenamingId(null);
-                                                setNewTitle("");
-                                            }
-                                        }}
-                                        className="w-full bg-transparent border border-white/20 text-white px-2 py-1 rounded-md text-sm"
-                                    />
-                                ) : (
-                                    <span className="truncate max-w-[80%]">{chat.videoTitle}</span>
-                                )}
+                                <div
+                                    className="truncate max-w-[80%]"
+                                    onClick={() => onChatSelect(chat._id)}
+                                >
+                                    {renamingId === chat._id ? (
+                                        <input
+                                            autoFocus
+                                            value={newTitle}
+                                            onChange={(e) => setNewTitle(e.target.value)}
+                                            onBlur={submitRename}
+                                            onKeyDown={(e) => {
+                                                if (e.key === "Enter") submitRename();
+                                                if (e.key === "Escape") {
+                                                    setRenamingId(null);
+                                                    setNewTitle("");
+                                                }
+                                            }}
+                                            className="w-full bg-transparent border border-white/20 text-white px-2 py-1 rounded-md text-sm"
+                                        />
+                                    ) : (
+                                        chat.videoTitle
+                                    )}
+                                </div>
 
                                 {/* 3-dot menu */}
-                                <div className="relative" ref={menuRef}>
-                                    {/* Button to open menu */}
+                                <div className="relative z-30" ref={menuRef}>
                                     <button
                                         onClick={(e) => {
-                                            e.stopPropagation();
+                                            e.stopPropagation(); // Prevent parent click
                                             setMenuOpenId(menuOpenId === chat._id ? null : chat._id);
                                         }}
                                         className="hover:text-white/80 flex chat-menu-button"
@@ -284,9 +288,11 @@ export const Sidebar = ({ onChatSelect }) => {
                                         <HiOutlineDotsHorizontal className="cursor-pointer" size={20} />
                                     </button>
 
-
                                     {menuOpenId === chat._id && (
-                                        <div className="absolute right-0 top-6 bg-[#2a2a2a] border border-white/10 rounded-xl p-1 shadow-lg z-20 w-40 text-sm chat-menu-dropdown">
+                                        <div
+                                            className="absolute right-0 top-6 bg-[#2a2a2a] border border-white/10 rounded-xl p-1 shadow-lg z-50 w-40 text-sm chat-menu-dropdown"
+                                            onClick={(e) => e.stopPropagation()} // Prevent parent click again
+                                        >
                                             {/*rename*/}
                                             <button
                                                 className="w-full text-left flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-[#3a3a3a]"
@@ -393,8 +399,8 @@ export const Sidebar = ({ onChatSelect }) => {
             {/* Share Modal */}
             {
                 showShareModal && (
-                    <div className="fixed inset-0 bg-black/60 z-50 flex justify-center items-center">
-                        <div className="bg-[#1a1a1a] p-6 rounded-3xl w-[90%] h-[40%] max-w-xl flex flex-col justify-between">
+                    <div className="fixed inset-0 bg-black/60 z-50 flex justify-center items-center px-5">
+                        <div className="bg-[#1a1a1a] lg:p-6 p-3 rounded-3xl lg:w-[90%] lg:h-[40%] max-w-xl flex flex-col lg:justify-between lg:gap-0 gap-5">
                             <div className="text-lg flex items-center justify-between">
                                 <p>Share public link to the chat</p>
                                 <button
@@ -404,34 +410,34 @@ export const Sidebar = ({ onChatSelect }) => {
                                 </button>
                             </div>
 
-                            <div className="flex items-center gap-15 rounded-4xl p-4 bg-white/10">
+                            <div className="flex items-center lg:gap-15 gap-7 rounded-4xl p-4 bg-white/10">
                                 <div>
-                                    <GiInfo size={16} />
+                                    <GiInfo className="size-4" />
                                 </div>
 
                                 <div>
-                                    <p className="font-bold">
+                                    <p className="font-bold lg:text-base text-sm">
                                         This conversation may include personal information.
                                     </p>
-                                    <p className="font-light">
+                                    <p className="font-light lg:text-base text-sm">
                                         Take a moment to check the content before sharing the link.
                                     </p>
                                 </div>
                             </div>
 
-                            <div className="border flex justify-end gap-5 p-2 border-white/30 rounded-full">
-                                <div className="flex items-center text-white/80">
+                            <div className="border flex justify-end lg:gap-5 gap-3 p-2 border-white/30 rounded-full">
+                                <div className="flex items-center text-white/80 text-xs">
                                     {publicLink}
                                 </div>
                                 <button
                                     onClick={handlePublicLink}
-                                    className="border flex items-center gap-1 font-semibold py-3 px-4 rounded-full text-lg cursor-pointer bg-white text-black"
+                                    className="border flex items-center gap-1 font-semibold lg:py-3 lg:px-4 py-2 px-2 rounded-full lg:text-lg text-[10px] cursor-pointer bg-white text-black"
                                 >
                                     {creating ? (
                                         <span>Creating link...</span>
                                     ) : (
                                         <span className="flex items-center gap-1">
-                                            <FaLink size={20} /> Create Link
+                                            <FaLink className="lg:size-5 size-3" /> Create Link
                                         </span>
                                     )}
                                 </button>
@@ -439,7 +445,22 @@ export const Sidebar = ({ onChatSelect }) => {
                         </div>
                     </div>
                 )
+
             }
+            {/* Logout Button (hidden on mobile, shown on md and up) */}
+            <div className="lg:hidden fixed bottom-0 left-0 md:static w-full px-3 py-4">
+                <button
+                    onClick={() => {
+                        localStorage.removeItem("token");
+                        window.location.href = "/"; // or navigate to your login page
+                    }}
+                    className="w-full text-sm rounded-xl text-white/80 bg-white/10 py-2 px-4 flex items-center justify-center gap-2"
+                >
+                    <RxExit /> Logout
+                </button>
+            </div>
+
         </div >
+
     );
 };

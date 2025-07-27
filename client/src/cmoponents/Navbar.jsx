@@ -14,7 +14,7 @@ export const Navbar = () => {
     };
 
     return (
-        <div className="flex flex-row justify-between items-center px-6 sm:px-20 py-5 gap-4 sm:gap-0">
+        <div className="flex flex-row justify-between items-center px-6 sm:px-20 lg:py-5 py-3 gap-4 sm:gap-0">
             <Link to="/">
                 <div className="flex gap-2 items-center cursor-pointer">
                     <ShinyText text="LearnAI" disabled={false} speed={5} className='custom-class text-[28px] font-xanh font-semibold' />
@@ -26,11 +26,13 @@ export const Navbar = () => {
                     <StarBorder
                         onClick={handelLogOut}
                         as="button"
-                        className="custom-class cursor-pointer bg-red-800/30"
+                        className="cursor-pointer bg-red-800/30 sm:inline-block"
                         color="red"
-                        speed="5s">
+                        speed="5s"
+                    >
                         Log Out
                     </StarBorder>
+
                 ) : (
                     <>
                         <Link to="/auth?type=signup">
