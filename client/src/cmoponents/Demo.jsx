@@ -1,7 +1,7 @@
 export const Demo = () => {
     return (
-        <div className="flex justify-center p-10">
-            <div className="relative w-auto h-[85vh]">
+        <div className="flex justify-center lg:p-10 px-5 py-10">
+            <div className="relative lg:w-auto lg:h-[85vh]">
 
                 <div className="absolute -top-4 -right-4 z-10">
                     <p className="bg-green-400 px-4 py-1 font-poppins text-center font-semibold text-sm rounded-full">

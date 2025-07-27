@@ -13,7 +13,7 @@
   bottom: -12px;
   right: -250%;
   border-radius: 50%;
-  animation: star-movement-bottom linear infinite alternate;
+  animation: star-movement-bottom 4s linear infinite alternate;
   z-index: 0;
 }
 
@@ -25,12 +25,12 @@
   top: -12px;
   left: -250%;
   border-radius: 50%;
-  animation: star-movement-top linear infinite alternate;
+  animation: star-movement-top 4s linear infinite alternate;
   z-index: 0;
 }
 
 .inner-content {
-  font-family: poppins;
+  font-family: 'Poppins', sans-serif;
   position: relative;
   border: 1px solid rgba(255, 255, 255, 0.2);
   background: rgba(255, 255, 255, 0.1);
@@ -46,6 +46,13 @@
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
 }
 
+@media (max-width: 640px) {
+  .inner-content {
+    font-size: 14px;
+    padding: 3px 18px;
+    border-radius: 20px;
+  }
+}
 
 @keyframes star-movement-bottom {
   0% {

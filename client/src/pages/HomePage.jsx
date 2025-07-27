@@ -7,7 +7,6 @@ import { GetStarted } from "../cmoponents/GetStarted"
 import { Footer } from "../cmoponents/Footer"
 import DarkVeil from "../cmoponents/ui/DarkVeil"
 import { useState } from "react"
-import LightRays from "../cmoponents/ui/LightRays"
 
 export const HomePage = () => {
     const [authType, setAuthType] = useState("login")

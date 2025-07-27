@@ -14,14 +14,14 @@ export const Navbar = () => {
     };
 
     return (
-        <div className="flex justify-between px-20 py-5">
+        <div className="flex flex-row justify-between items-center px-6 sm:px-20 py-5 gap-4 sm:gap-0">
             <Link to="/">
                 <div className="flex gap-2 items-center cursor-pointer">
                     <ShinyText text="LearnAI" disabled={false} speed={5} className='custom-class text-[28px] font-xanh font-semibold' />
                 </div>
             </Link>
 
-            <div className="flex gap-5 items-center">
+            <div className="flex lg:gap-5 gap-2 items-center">
                 {token ? (
                     <StarBorder
                         onClick={handelLogOut}
