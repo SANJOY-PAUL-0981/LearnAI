@@ -42,7 +42,7 @@ export const ChatPage = () => {
         <Navbar />
 
         {selectedChatId ? (
-          <div className="flex-1 overflow-hidden">
+          <div className="flex-1 overflow-hidden mx-20">
             {loading ? (
               <div className="flex items-center justify-center h-full text-white/50 text-sm">
                 Loading chat...

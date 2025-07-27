@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { BsSend } from "react-icons/bs";
 import axios from "axios";
+import MarkdownRenderer from "../ui/MarkdownRenderer"
 
 export const ChatBox = ({ messages, chatId }) => {
   const [input, setInput] = useState("");
@@ -63,10 +64,10 @@ export const ChatBox = ({ messages, chatId }) => {
             key={idx}
             className={`px-4 py-2 rounded-2xl text-sm whitespace-pre-wrap ${msg.role === "user"
               ? "bg-white/20 w-fit max-w-[40%] shadow-md ml-auto text-left"
-              : "bg-[#2a2a2a] w-fit max-w-[60%] mr-auto text-left"
+              : "w-fit max-w-[80%] mr-auto text-left"
               }`}
           >
-            {msg.content}
+            <MarkdownRenderer content={msg.content}/>
           </div>
         ))}
 

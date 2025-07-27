@@ -17,10 +17,7 @@ export const Navbar = () => {
         <div className="flex justify-between px-20 py-5">
             <Link to="/">
                 <div className="flex gap-2 items-center cursor-pointer">
-                    <div className="bg-gradient-to-br from-gray-200 to-gray-600 p-1 rounded-lg">
-                        <LuBrain className="size-7" />
-                    </div>
-                    <ShinyText text="LearnAI" disabled={false} speed={5} className='custom-class text-3xl font-xanh font-semibold' />
+                    <ShinyText text="LearnAI" disabled={false} speed={5} className='custom-class text-[28px] font-xanh font-semibold' />
                 </div>
             </Link>
 
