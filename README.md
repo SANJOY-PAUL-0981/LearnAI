@@ -1,5 +1,12 @@
 # LearnAI
 This is learn AI, chat with Youtube videos and learn more efficiently
+
+## Improvements
+- Markdown parse done
+- OAuth integration have to do
+- Change LogOut button
+- All over UI improve in chat section
+
 ### API Resources
 YouTube Transcript APIs from RapidAPI:
 (Not sure about all of them working, i can change gmail and create a API always)
