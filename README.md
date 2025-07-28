@@ -15,7 +15,7 @@
 - [API Resources](#api-resources)
 
 ## About The Project
-![image](https://github.com/SANJOY-PAUL-0981/LearnAI/tree/main/client/src/assets/image.png)
+![image](https://github.com/SANJOY-PAUL-0981/LearnAI/blob/main/client/src/assets/image.png)
 
 
 A web platform that enables users to chat with YouTube videos, making the learning faster, easier, and more interactive.
