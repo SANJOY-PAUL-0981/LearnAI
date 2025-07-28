@@ -19,7 +19,7 @@
 
 
 A web platform that enables users to chat with YouTube videos, making the learning faster, easier, and more interactive.
-don't only just clone the repo please give it a star to show some love.
+### don't only just clone the repo please give it a star to show some love.
 
 
 
