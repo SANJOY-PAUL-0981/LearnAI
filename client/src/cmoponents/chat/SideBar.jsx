@@ -13,6 +13,7 @@ import { GiInfo } from "react-icons/gi";
 import { RxCross1 } from "react-icons/rx";
 import { RxExit } from "react-icons/rx";
 
+
 export const Sidebar = ({ onChatSelect }) => {
     const [chats, setChats] = useState([]);
     const [showModal, setShowModal] = useState(false);
@@ -26,6 +27,7 @@ export const Sidebar = ({ onChatSelect }) => {
     const [creating, setCreating] = useState(false);
     const [linkCreating, setLinkCreating] = useState(null)
     const [publicLink, setPublicLink] = useState("")
+    const [errorMessage, setErrorMessage] = useState("");
 
     const menuRef = useRef(null);
 
@@ -70,6 +72,8 @@ export const Sidebar = ({ onChatSelect }) => {
             }
         } catch (err) {
             console.error("Error creating chat:", err);
+            setErrorMessage("Failed to generate transcription. Please try again.");
+            setTimeout(() => setErrorMessage(""), 5000);
         } finally {
             setCreating(false)
         }
@@ -459,6 +463,21 @@ export const Sidebar = ({ onChatSelect }) => {
                     <RxExit /> Logout
                 </button>
             </div>
+
+            {errorMessage && (
+                <div
+                    className="fixed bottom-5 right-5 bg-red-500 text-white px-4 py-2 rounded-md shadow-lg z-[9999] text-sm transition-all duration-500 ease-out"
+                    style={{ transform: "translateX(0)", animation: "slideFromRight 0.4s ease-out forwards" }}
+                >
+                    {errorMessage}
+                    <style>{`
+                    @keyframes slideFromRight {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }`}
+                    </style>
+                </div>
+            )}
 
         </div >
 

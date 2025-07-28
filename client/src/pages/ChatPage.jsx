@@ -3,13 +3,13 @@ import { Navbar } from "../cmoponents/Navbar";
 import { Sidebar } from "../cmoponents/chat/SideBar";
 import { ChatBox } from "../cmoponents/chat/ChatBox";
 import axios from "axios";
-import { RxCross1, RxHamburgerMenu } from "react-icons/rx"; // Icons
+import { RxCross1, RxHamburgerMenu } from "react-icons/rx";
 
 export const ChatPage = () => {
   const [selectedChatId, setSelectedChatId] = useState(null);
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [showSidebar, setShowSidebar] = useState(true); // Sidebar toggle
+  const [showSidebar, setShowSidebar] = useState(true); 
 
   const handleChatSelect = async (chatId) => {
     try {

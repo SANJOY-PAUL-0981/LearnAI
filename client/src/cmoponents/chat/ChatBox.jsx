@@ -8,6 +8,7 @@ export const ChatBox = ({ messages, chatId }) => {
   const [chatMessages, setChatMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
   const scrollRef = useRef(null);
+  
 
   useEffect(() => {
     setChatMessages(messages || []);
@@ -16,9 +17,13 @@ export const ChatBox = ({ messages, chatId }) => {
   const handleSend = async () => {
     if (!input.trim() || !chatId) return;
 
-    try {
-      setIsTyping(true);
+    const userMessage = { role: "user", content: input };
 
+    setChatMessages((prev) => [...prev, userMessage]);
+    setInput("");
+    setIsTyping(true);
+
+    try {
       const res = await axios.post(
         "http://localhost:3000/api/v1/chat/send",
         {
@@ -33,12 +38,9 @@ export const ChatBox = ({ messages, chatId }) => {
         }
       );
 
-      setChatMessages((prev) => [
-        ...prev,
-        { role: "user", content: res.data.userQuestion },
-        { role: "ai", content: res.data.aiResponse },
-      ]);
-      setInput("");
+      const aiMessage = { role: "ai", content: res.data.aiResponse };
+
+      setChatMessages((prev) => [...prev, aiMessage]);
     } catch (err) {
       console.error("Error sending message:", err);
     } finally {
@@ -78,13 +80,21 @@ export const ChatBox = ({ messages, chatId }) => {
 
       <div className="flex justify-center lg:py-1 py-5">
         <div className="relative w-[90vw] md:w-[45vw]">
+          
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                handleSend();
+              }
+            }}
             rows={4}
             className="w-full lg:h-[15vh] h-[10vh] resize-none rounded-4xl px-6 pr-12 py-5 text-base mb-2 border border-white/20 bg-white/5 text-white overflow-y-auto"
             placeholder="Ask Anything"
           />
+
           <button
             onClick={handleSend}
             className="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300"
