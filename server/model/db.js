@@ -53,7 +53,8 @@ const chatSchema = new Schema({
     },
     publicId: {
         type: String, 
-        unique: true
+        unique: true,
+        sparse: true
     },
     videoTitle: {
         type: String
